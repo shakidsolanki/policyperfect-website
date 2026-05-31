@@ -1,0 +1,10 @@
+node_modules
+.git
+.expo
+.next
+.replit-artifact
+replit_temp
+replit_temp2
+artifacts/policyperfect-mobile
+attached_assets
+.expo-shared

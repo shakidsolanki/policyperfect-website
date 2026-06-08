@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, User, LogOut, Search, Trash2, Database } from 'lucide-react';
+import { Lock, User, LogOut, Search, Trash2, Database, Eye, X } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [leads, setLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedLead, setSelectedLead] = useState(null);
 
   useEffect(() => {
     // Check if already logged in via session storage
@@ -199,6 +200,7 @@ const AdminDashboard = () => {
                       <td className="px-6 py-4">{lead.mobile || '-'}</td>
                       <td className="px-6 py-4 text-xs text-slate-500">
                         {lead.regNo && <div><span className="font-medium">Reg:</span> {lead.regNo}</div>}
+                        {lead.make && <div><span className="font-medium">Vehicle:</span> {lead.make} {lead.model}</div>}
                         {lead.age && <div><span className="font-medium">Age:</span> {lead.age}</div>}
                         {lead.annualIncome && <div><span className="font-medium">Income:</span> ₹{lead.annualIncome}</div>}
                         {lead.destination && <div><span className="font-medium">Dest:</span> {lead.destination} ({lead.duration} days)</div>}
@@ -206,8 +208,15 @@ const AdminDashboard = () => {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button 
+                          onClick={() => setSelectedLead(lead)}
+                          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 p-2 rounded-lg transition-colors mr-2 inline-flex items-center"
+                          title="View Details"
+                        >
+                          <Eye size={18} />
+                        </button>
+                        <button 
                           onClick={() => handleDelete(lead.id)}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors inline-flex items-center"
                           title="Delete Lead"
                         >
                           <Trash2 size={18} />
@@ -229,6 +238,77 @@ const AdminDashboard = () => {
         </div>
 
       </main>
+
+      {/* Lead Detail Modal */}
+      {selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[85vh]">
+            <div className="bg-[#012e67] text-white px-6 py-4 flex justify-between items-center">
+              <div>
+                <span className="bg-blue-900 text-blue-250 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">{selectedLead.productType}</span>
+                <h3 className="text-lg font-black mt-1">Lead Details (Ref: {selectedLead.refNo || selectedLead.id})</h3>
+              </div>
+              <button onClick={() => setSelectedLead(null)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-700">
+              <div className="grid grid-cols-2 gap-4">
+                <div><span className="font-bold text-slate-400 block text-xs uppercase">Date Created</span><span className="font-semibold">{selectedLead.date}</span></div>
+                <div><span className="font-bold text-slate-400 block text-xs uppercase">Source Page</span><span className="font-semibold">{selectedLead.source || 'Standard Form'}</span></div>
+                <div><span className="font-bold text-slate-400 block text-xs uppercase">Lead Status</span><span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">{selectedLead.status || 'New Lead'}</span></div>
+              </div>
+              
+              <div className="border-t border-slate-100 pt-4 space-y-4">
+                <h4 className="font-black text-slate-800 uppercase text-xs tracking-wider">👤 Personal Information</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div><span className="font-bold text-slate-400 block text-xs uppercase">Full Name</span><span className="font-semibold text-slate-800">{selectedLead.name}</span></div>
+                  <div><span className="font-bold text-slate-400 block text-xs uppercase">Mobile Number</span><span className="font-semibold text-slate-800">{selectedLead.mobile}</span></div>
+                  {selectedLead.altMobile && <div><span className="font-bold text-slate-400 block text-xs uppercase">Alt Mobile</span><span className="font-semibold">{selectedLead.altMobile}</span></div>}
+                  <div><span className="font-bold text-slate-400 block text-xs uppercase">Email Address</span><span className="font-semibold">{selectedLead.email || '-'}</span></div>
+                  <div className="col-span-2"><span className="font-bold text-slate-400 block text-xs uppercase">Location</span><span className="font-semibold">{selectedLead.city}, {selectedLead.state} - {selectedLead.pincode}</span></div>
+                  {selectedLead.address && <div className="col-span-2"><span className="font-bold text-slate-400 block text-xs uppercase">Address</span><span className="font-semibold">{selectedLead.address}</span></div>}
+                </div>
+              </div>
+
+              {/* Vehicle specific details */}
+              {selectedLead.make && (
+                <div className="border-t border-slate-100 pt-4 space-y-4">
+                  <h4 className="font-black text-slate-800 uppercase text-xs tracking-wider">🚗 Vehicle Information</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Vehicle Type</span><span className="font-semibold text-slate-800">{selectedLead.vehicleType}</span></div>
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Make & Model</span><span className="font-semibold text-slate-800">{selectedLead.make} {selectedLead.model}</span></div>
+                    {selectedLead.variant && <div><span className="font-bold text-slate-400 block text-xs uppercase">Variant</span><span className="font-semibold">{selectedLead.variant}</span></div>}
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Fuel & Mfg Year</span><span className="font-semibold">{selectedLead.fuel} ({selectedLead.mfgYear})</span></div>
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Registration No</span><span className="font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 font-bold">{selectedLead.regNo}</span></div>
+                  </div>
+                </div>
+              )}
+
+              {/* Policy specific details */}
+              {selectedLead.currentInsurer && (
+                <div className="border-t border-slate-100 pt-4 space-y-4">
+                  <h4 className="font-black text-slate-800 uppercase text-xs tracking-wider">🛡️ Policy & NCB Details</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Previous Insurer</span><span className="font-semibold text-slate-800">{selectedLead.currentInsurer}</span></div>
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Expiry Date</span><span className="font-semibold">{selectedLead.expiryDate}</span></div>
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Policy Type</span><span className="font-semibold">{selectedLead.policyType}</span></div>
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Claim History</span><span className="font-semibold">{selectedLead.claimHistory}</span></div>
+                    <div><span className="font-bold text-slate-400 block text-xs uppercase">Current NCB</span><span className="font-semibold text-green-700">{selectedLead.ncb}</span></div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+              <button onClick={() => setSelectedLead(null)} className="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-sm transition-colors">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

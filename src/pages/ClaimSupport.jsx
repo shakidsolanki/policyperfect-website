@@ -1,9 +1,15 @@
 import React from 'react';
 import { PhoneCall, Mail, MessageCircle } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const ClaimSupport = () => {
   return (
     <div className="min-h-[80vh] bg-slate-50 py-20 px-4">
+      <SEO 
+        title="Hassle-Free Cashless Claims &amp; Support 24/7 | PolicyPerfect" 
+        description="Register and track your insurance claims easily online. Get 24x7 helpline support, cashless repairs at network garages, and quick document reviews." 
+        url="https://policyperfect.co.in/claims"
+      />
       <div className="max-w-[1000px] mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-black text-slate-800 mb-4">Claim Support Center</h1>

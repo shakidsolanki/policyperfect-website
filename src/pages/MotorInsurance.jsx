@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import MotorLeadModal from '../components/MotorLeadModal';
 import { PartnerLogos, FAQ } from '../components/HomeSections';
+import SEO from '../components/SEO';
 
 const MotorInsurance = () => {
   const location = useLocation();
@@ -22,8 +23,47 @@ const MotorInsurance = () => {
     ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=800' // Premium Bike image
     : 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=80&w=800'; // Sleek blue car image
 
+  const seoTitle = isBike 
+    ? "Two Wheeler &amp; Bike Insurance Online - Save up to 80% | PolicyPerfect" 
+    : "Car &amp; Motor Insurance Online - Instant Quote &amp; Renewal | PolicyPerfect";
+  
+  const seoDesc = isBike 
+    ? "Compare and renew bike or scooter insurance online instantly. Save up to 80% on premiums with comprehensive own-damage and mandatory third-party coverage." 
+    : "Compare and buy the best car insurance plans online. Enjoy instant digital policy issuance, cashless claims across 5,000+ garages, and high own-damage protection.";
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is No Claim Bonus (NCB) in motor insurance?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No Claim Bonus (NCB) is a discount on the own-damage premium offered by insurers for every claim-free year. It starts at 20% for the first claim-free year and can go up to 50% for five consecutive claim-free years."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is third-party motor insurance mandatory in India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, under the Motor Vehicles Act, third-party liability insurance is legally mandatory for all vehicles operating on public roads in India."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="w-full min-h-screen bg-slate-50 font-sans pb-16">
+      <SEO 
+        title={seoTitle}
+        description={seoDesc}
+        url={isBike ? "https://policyperfect.co.in/product/bike" : "https://policyperfect.co.in/product/car"}
+      />
+      <script type="application/ld+json">
+        {JSON.stringify(faqSchema)}
+      </script>
       
       {/* Hero Section */}
       <section className="bg-white border-b border-slate-200 pt-10 pb-16 px-4 sm:px-6 lg:px-8">

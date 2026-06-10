@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { CheckCircle2, ShieldCheck, Star, ArrowLeft } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const ProductDetail = () => {
   const { type } = useParams();
@@ -66,6 +67,11 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans pb-24">
+      <SEO 
+        title={`${data.title} - Compare &amp; Buy Best Plans Online | PolicyPerfect`} 
+        description={data.desc} 
+        url={`https://policyperfect.co.in/product/${type}`}
+      />
       {/* HEADER SECTION */}
       <div className="bg-[#111827] pt-12 pb-24 text-white">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6">

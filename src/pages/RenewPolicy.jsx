@@ -1,8 +1,14 @@
 import React from 'react';
+import SEO from '../components/SEO';
 
 const RenewPolicy = () => {
   return (
     <div className="min-h-[80vh] bg-slate-50 flex flex-col items-center justify-center px-4 py-20">
+      <SEO 
+        title="Instant Insurance Policy Renewal Online | PolicyPerfect" 
+        description="Renew your car, bike, health, or life insurance policy instantly online. Keep your coverage active with seamless, secure, and hassle-free payment options." 
+        url="https://policyperfect.co.in/renew"
+      />
       <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl border border-slate-100 p-8 md:p-12 text-center">
         <h1 className="text-3xl font-black text-[#1e3a8a] mb-4">Renew Policy</h1>
         <p className="text-slate-500 mb-8">Enter your existing policy details below to renew instantly and continue enjoying seamless protection.</p>

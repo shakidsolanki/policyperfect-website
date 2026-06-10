@@ -6,6 +6,7 @@ import {
   Users, Shield, Star, Clock, Percent, ShieldCheck, X, ArrowRight
 } from 'lucide-react';
 import { PartnerLogos, WhyChooseUs, FAQ, Footer, Testimonials, AppDownload, CTASection } from '../components/HomeSections';
+import SEO from '../components/SEO';
 
 const Home = () => {
   const products = [
@@ -33,8 +34,31 @@ const Home = () => {
     { icon: Clock, value: '5 Min', label: 'Instant Policy' }
   ];
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PolicyPerfect",
+    "url": "https://policyperfect.co.in",
+    "logo": "https://policyperfect.co.in/logo.png",
+    "description": "PolicyPerfect Insurance offers custom and affordable plans for Health, Life, Motor, Travel, and Home Insurance. Compare quotes and renew policies instantly online.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+91-99999-99999",
+      "contactType": "customer service",
+      "areaServed": "IN",
+      "availableLanguage": ["en", "hi"]
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-[#1c2237] font-sans overflow-x-hidden">
+      <SEO 
+        title="PolicyPerfect Insurance | Compare &amp; Buy Best Insurance Plans Online"
+        description="Compare and buy cheap insurance policies instantly in India. PolicyPerfect offers Health, Life, Motor, Travel, and Cyber insurance. Get a free quote today!"
+      />
+      <script type="application/ld+json">
+        {JSON.stringify(organizationSchema)}
+      </script>
       
       {/* Hero Section */}
       <section className="relative pt-20 pb-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">

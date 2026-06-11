@@ -5,7 +5,7 @@ import {
   Car, Heart, TrendingUp, Plane, Home as HomeIcon, 
   Users, Shield, Star, Clock, Percent, ShieldCheck, X, ArrowRight
 } from 'lucide-react';
-import { PartnerLogos, WhyChooseUs, FAQ, Footer, Testimonials, AppDownload, CTASection } from '../components/HomeSections';
+import { PartnerLogos, WhyChooseUs, FAQ, Testimonials, AppDownload, CTASection } from '../components/HomeSections';
 import SEO from '../components/SEO';
 
 const Home = () => {
@@ -217,7 +217,6 @@ const Home = () => {
       <AppDownload />
       <FAQ />
       <CTASection />
-      <Footer />
 
       {/* All Products Modal */}
       <AnimatePresence>

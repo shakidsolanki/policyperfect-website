@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { PartnerLogos, WhyChooseUs, FAQ, Testimonials, AppDownload, CTASection } from '../components/HomeSections';
 import SEO from '../components/SEO';
+import { db } from '../utils/db';
+import ProductQuoteModal from '../components/ProductQuoteModal';
 
 const Home = () => {
   const products = [
@@ -26,6 +28,31 @@ const Home = () => {
   ];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
+  const [selectedProductType, setSelectedProductType] = useState('health');
+  const [banner, setBanner] = useState({ imageUrl: '', redirectUrl: '' });
+
+  const handleProductClick = (product, e) => {
+    if (product.name === 'Motor' || product.name === 'Two Wheeler') {
+      return; // Navigate normally
+    }
+    e.preventDefault();
+    let type = 'health';
+    if (product.name === 'Life') type = 'life';
+    else if (product.name === 'Home') type = 'fire';
+    else if (product.name === 'Travel') type = 'travel';
+    else if (product.name === 'Cyber') type = 'cyber';
+    else if (product.name === 'Pet') type = 'pet';
+    else if (product.name === 'Business') type = 'business';
+
+    setSelectedProductType(type);
+    setQuoteModalOpen(true);
+    setIsModalOpen(false); // Close the "All Products" modal if it is open
+  };
+
+  useEffect(() => {
+    setBanner(db.getBanner());
+  }, []);
 
   const stats = [
     { icon: Users, value: '2 Lakh+', label: 'Happy Customers' },
@@ -147,7 +174,7 @@ const Home = () => {
                   const Icon = product.icon;
                   return (
                     <motion.div key={idx} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                      <Link to={product.path} className="flex flex-col items-center gap-3 group">
+                      <Link to={product.path} onClick={(e) => handleProductClick(product, e)} className="flex flex-col items-center gap-3 group">
                         <div className={`w-20 h-20 rounded-3xl ${product.color} flex items-center justify-center shadow-lg transition-transform group-hover:-translate-y-2 group-hover:shadow-2xl`}>
                           <Icon size={32} className="text-white" strokeWidth={2} />
                         </div>
@@ -181,12 +208,14 @@ const Home = () => {
               className="relative w-full aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl"
             >
               {/* Main Image */}
-              <img 
-                src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&q=80&w=1200" 
-                alt="Family Insurance Protection" 
-                className="w-full h-full object-cover opacity-90"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1c2237]/80 to-transparent"></div>
+              <a href={banner.redirectUrl || '#'} className="block w-full h-full cursor-pointer">
+                <img 
+                  src={banner.imageUrl || "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&q=80&w=1200"} 
+                  alt="Family Insurance Protection" 
+                  className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500"
+                />
+              </a>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1c2237]/80 to-transparent pointer-events-none"></div>
 
               {/* Floating Badge 1 (Top Right) */}
               <motion.div 
@@ -298,7 +327,7 @@ const Home = () => {
                       >
                         <Link 
                           to={product.path} 
-                          onClick={() => setIsModalOpen(false)}
+                          onClick={(e) => handleProductClick(product, e)}
                           className="flex flex-col items-center gap-4 p-6 rounded-[2rem] bg-white hover:bg-slate-50 transition-colors group border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:-translate-y-1 block h-full"
                         >
                           <div className={`w-20 h-20 rounded-2xl ${product.color} flex items-center justify-center shadow-md transition-transform group-hover:scale-110 group-hover:shadow-lg`}>
@@ -317,6 +346,12 @@ const Home = () => {
           </div>
         )}
       </AnimatePresence>
+
+      <ProductQuoteModal 
+        isOpen={quoteModalOpen} 
+        onClose={() => setQuoteModalOpen(false)} 
+        defaultProductType={selectedProductType} 
+      />
 
     </div>
   );

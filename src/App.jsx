@@ -8,6 +8,8 @@ import MotorInsurance from './pages/MotorInsurance';
 import AdminDashboard from './pages/AdminDashboard';
 import RenewPolicy from './pages/RenewPolicy';
 import ClaimSupport from './pages/ClaimSupport';
+import CustomerDashboard from './pages/CustomerDashboard';
+import ChatWidget from './components/ChatWidget';
 
 function App() {
   return (
@@ -23,9 +25,12 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/renew" element={<RenewPolicy />} />
             <Route path="/claims" element={<ClaimSupport />} />
+            <Route path="/login" element={<CustomerDashboard />} />
+            <Route path="/dashboard" element={<CustomerDashboard />} />
           </Routes>
         </main>
         <Footer />
+        <ChatWidget />
       </div>
     </Router>
   );

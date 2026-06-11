@@ -54,15 +54,59 @@ const MotorInsurance = () => {
     ]
   };
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": pageTitle,
+    "image": mainImage,
+    "description": seoDesc,
+    "brand": {
+      "@type": "Brand",
+      "name": "PolicyPerfect"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "url": `https://policyperfect.co.in${location.pathname}`,
+      "priceCurrency": "INR",
+      "lowPrice": isBike ? "500" : "2000",
+      "highPrice": isBike ? "5000" : "50000",
+      "offerCount": "25"
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://policyperfect.co.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": pageTitle,
+        "item": `https://policyperfect.co.in${location.pathname}`
+      }
+    ]
+  };
+
   return (
     <div className="w-full min-h-screen bg-slate-50 font-sans pb-16">
       <SEO 
         title={seoTitle}
         description={seoDesc}
-        url={isBike ? "https://policyperfect.co.in/product/bike" : "https://policyperfect.co.in/product/car"}
       />
       <script type="application/ld+json">
         {JSON.stringify(faqSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(productSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
       </script>
       
       {/* Hero Section */}

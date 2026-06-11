@@ -65,13 +65,128 @@ const ProductDetail = () => {
     }, 2000);
   };
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": data.title,
+    "image": "https://policyperfect.co.in/favicon.png?v=3",
+    "description": data.desc,
+    "brand": {
+      "@type": "Brand",
+      "name": "PolicyPerfect"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "url": `https://policyperfect.co.in/product/${type}`,
+      "priceCurrency": "INR",
+      "lowPrice": type === 'health' ? '1000' : type === 'life' ? '500' : '300',
+      "highPrice": type === 'health' ? '15000' : type === 'life' ? '12000' : '4000',
+      "offerCount": "15"
+    }
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://policyperfect.co.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": data.title,
+        "item": `https://policyperfect.co.in/product/${type}`
+      }
+    ]
+  };
+
+  const getFAQEntity = (productType) => {
+    switch (productType) {
+      case 'health':
+        return [
+          {
+            "@type": "Question",
+            "name": "What is cashless hospitalization in health insurance?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cashless hospitalization is a facility where the insured doesn't need to pay the medical bill directly to the network hospital. The insurer pays the hospital directly, subject to approval and policy limits."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are pre-existing diseases in health insurance?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pre-existing diseases are medical conditions that the insured person had before purchasing the health insurance policy. Typically, these are covered after a waiting period of 2 to 4 years."
+            }
+          }
+        ];
+      case 'life':
+        return [
+          {
+            "@type": "Question",
+            "name": "What is Term Life Insurance?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Term life insurance provides financial coverage to the policyholder's beneficiaries for a specific 'term' of years. If the insured passes away during the term, a death benefit is paid to the family."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is term insurance premium tax-deductible in India?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, term life insurance premiums paid are tax-deductible up to Rs 1.5 Lakhs under Section 80C of the Income Tax Act, 1961."
+            }
+          }
+        ];
+      default:
+        return [
+          {
+            "@type": "Question",
+            "name": "How long does it take to issue a policy on PolicyPerfect?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Policies are issued instantly online. Once you fill in your details, compare quotes, and complete the premium payment, the policy copy is generated and sent to your registered email immediately."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I cancel my insurance policy after purchase?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, most insurers provide a free-look period of 15 days from the date of receiving the policy document. You can cancel and receive a refund, minus administrative costs."
+            }
+          }
+        ];
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": getFAQEntity(type)
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans pb-24">
       <SEO 
-        title={`${data.title} - Compare &amp; Buy Best Plans Online | PolicyPerfect`} 
+        title={`${data.title} - Compare & Buy Best Plans Online | PolicyPerfect`} 
         description={data.desc} 
-        url={`https://policyperfect.co.in/product/${type}`}
       />
+      <script type="application/ld+json">
+        {JSON.stringify(productSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(faqSchema)}
+      </script>
       {/* HEADER SECTION */}
       <div className="bg-[#111827] pt-12 pb-24 text-white">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6">

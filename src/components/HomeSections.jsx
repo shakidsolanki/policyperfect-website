@@ -213,7 +213,7 @@ export const AppDownload = () => {
           <div className="md:w-1/3 relative z-10 hidden md:block">
             <div className="w-full aspect-[9/16] bg-slate-900 rounded-[2rem] border-8 border-slate-800 shadow-2xl overflow-hidden relative">
               <div className="absolute top-4 left-1/2 -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-xl z-20"></div>
-              <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&q=80&w=600" alt="App Preview" className="w-full h-full object-cover opacity-80" />
+              <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?auto=format&fit=crop&q=80&w=600" alt="App Preview" className="w-full h-full object-cover opacity-80" loading="lazy" />
             </div>
           </div>
         </div>

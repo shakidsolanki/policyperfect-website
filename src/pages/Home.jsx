@@ -43,10 +43,25 @@ const Home = () => {
     "description": "PolicyPerfect Insurance offers custom and affordable plans for Health, Life, Motor, Travel, and Home Insurance. Compare quotes and renew policies instantly online.",
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+91-99999-99999",
+      "telephone": "+91-75749-48768",
       "contactType": "customer service",
       "areaServed": "IN",
       "availableLanguage": ["en", "hi"]
+    }
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PolicyPerfect",
+    "url": "https://policyperfect.co.in",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://policyperfect.co.in/product/{search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
     }
   };
 
@@ -58,6 +73,9 @@ const Home = () => {
       />
       <script type="application/ld+json">
         {JSON.stringify(organizationSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(websiteSchema)}
       </script>
       
       {/* Hero Section */}

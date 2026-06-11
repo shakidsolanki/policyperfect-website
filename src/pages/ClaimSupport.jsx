@@ -3,13 +3,76 @@ import { PhoneCall, Mail, MessageCircle } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const ClaimSupport = () => {
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Insurance Claim Assistance",
+    "provider": {
+      "@type": "InsuranceAgency",
+      "name": "PolicyPerfect",
+      "url": "https://policyperfect.co.in"
+    },
+    "description": "Register and track your insurance claims online with 24/7 customer support and cashless claim settlement services.",
+    "areaServed": "IN"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://policyperfect.co.in/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Claims Support",
+        "item": "https://policyperfect.co.in/claims"
+      }
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I register a claim on PolicyPerfect?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can register a claim by calling our 24/7 customer support at +91 75749 48768 or emailing us your policy and damage details at claims@policyperfect.co.in. Our claim experts will guide you through the document verification and garage allocation process immediately."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is cashless claim settlement?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cashless claim settlement allows you to get your insured asset (like a car or bike) repaired at our network garages without paying the repair bills out of pocket. The bills are settled directly by the insurer, except for mandatory deductibles."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="min-h-[80vh] bg-slate-50 py-20 px-4">
       <SEO 
-        title="Hassle-Free Cashless Claims &amp; Support 24/7 | PolicyPerfect" 
+        title="Hassle-Free Cashless Claims & Support 24/7 | PolicyPerfect" 
         description="Register and track your insurance claims easily online. Get 24x7 helpline support, cashless repairs at network garages, and quick document reviews." 
-        url="https://policyperfect.co.in/claims"
       />
+      <script type="application/ld+json">
+        {JSON.stringify(serviceSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(faqSchema)}
+      </script>
       <div className="max-w-[1000px] mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-black text-slate-800 mb-4">Claim Support Center</h1>

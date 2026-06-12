@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { db } from '../utils/db';
 import { 
   PhoneCall, MessageCircle, ShieldCheck, FileText, Clock, AlertTriangle, 
   CheckCircle2, XCircle, ChevronDown, ChevronUp, AlertCircle,
@@ -12,6 +13,12 @@ import SEO from '../components/SEO';
 const ClaimSupport = () => {
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeDocTab, setActiveDocTab] = useState('ownDamage');
+  const [contact, setContact] = useState({});
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    try { setContact(db.getContact()); } catch(e){}
+  }, []);
 
   const processSteps = [
     { title: 'Accident Occurs', desc: 'Accident or damage happens.' },
@@ -94,10 +101,10 @@ const ClaimSupport = () => {
             </motion.p>
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="tel:18001234567" className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white rounded-2xl font-black text-[15px] shadow-xl shadow-teal-900/50 transition-all w-full sm:w-auto">
+              <a href={`tel:${contact?.phone?.replace(/\s+/g, '') || '18001234567'}`} className="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white rounded-2xl font-black text-[15px] shadow-xl shadow-teal-900/50 transition-all w-full sm:w-auto">
                 <PhoneCall size={18} /> Call Claim Support
               </a>
-              <a href="https://wa.me/917574948768" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#25D366] rounded-2xl font-black text-[15px] backdrop-blur-md transition-all w-full sm:w-auto">
+              <a href={`https://wa.me/91${contact?.whatsapp || '7574948768'}`} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#25D366] rounded-2xl font-black text-[15px] backdrop-blur-md transition-all w-full sm:w-auto">
                 <MessageCircle size={18} /> WhatsApp Us
               </a>
             </motion.div>

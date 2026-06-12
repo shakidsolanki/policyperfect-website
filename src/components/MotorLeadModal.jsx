@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Shield, CheckCircle, Info, HelpCircle } from 'lucide-react';
+import { 
+  X, CheckCircle2, AlertCircle, Calendar,
+  Car, Shield, FileText, Smartphone,
+  Zap, ArrowRight, UserCircle, Phone, Mail
+} from 'lucide-react';
+import { db } from '../utils/db';
 
 const makeOptions = {
   car: ['Maruti Suzuki', 'Hyundai', 'Tata', 'Mahindra', 'Toyota', 'Honda', 'Kia', 'Renault', 'Nissan', 'Volkswagen', 'Skoda', 'MG', 'Jeep', 'BMW', 'Mercedes', 'Audi', 'Other'],
@@ -94,9 +99,18 @@ const MotorLeadModal = ({ isOpen, onClose, defaultVehicleType = 'car' }) => {
   const [errors, setErrors] = useState({});
   const [pincodeLoading, setPincodeLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
   const [refNumber, setRefNumber] = useState('');
-  const [showNcbTooltip, setShowNcbTooltip] = useState(false);
+  const [contact, setContact] = useState({});
+
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setErrors({});
+      setShowSummary(false);
+      try { setContact(db.getContact()); } catch(e){}
+    }
+  }, [isOpen]);
 
   // Generate reference number on submission
   const generateRef = () => {
@@ -993,7 +1007,7 @@ const MotorLeadModal = ({ isOpen, onClose, defaultVehicleType = 'car' }) => {
                   Track Request
                 </button>
                 <a 
-                  href="tel:+917574948768"
+                  href={`tel:${contact?.phone?.replace(/\s+/g, '') || '+917574948768'}`}
                   className="bg-blue-50 text-[#012e67] border border-blue-100 font-bold py-3 rounded-xl hover:bg-blue-100 transition-colors text-sm flex items-center justify-center gap-1.5"
                 >
                   Talk To Expert

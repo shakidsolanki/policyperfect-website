@@ -328,6 +328,11 @@ export const AppDownload = () => {
 };
 
 export const CTASection = () => {
+  const [contact, setContact] = React.useState({});
+  React.useEffect(() => {
+    try { setContact(db.getContact()); } catch(e){}
+  }, []);
+
   return (
     <section className="py-16 sm:py-20 bg-gradient-to-br from-[#0d9488] via-[#0f766e] to-[#115e59] text-center relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -350,9 +355,9 @@ export const CTASection = () => {
           >
             Get Free Quote <ArrowRight size={18} />
           </motion.button>
-          <a href="tel:+917574948768" className="flex items-center gap-2 text-teal-100 font-bold text-[14px] hover:text-white transition-colors">
+          <a href={`tel:${contact?.phone?.replace(/\s+/g, '') || '+917574948768'}`} className="flex items-center gap-2 text-teal-100 font-bold text-[14px] hover:text-white transition-colors">
             <PhoneCall size={16} />
-            Call +91 75749 48768
+            Call {contact?.phone || '+91 75749 48768'}
           </a>
         </div>
       </div>

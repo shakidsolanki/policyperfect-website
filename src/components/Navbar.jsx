@@ -13,6 +13,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [logo, setLogo] = useState({ url: '/logo.png', width: '180' });
+  const [contact, setContact] = useState({});
   const location = useLocation();
   const dropdownRef = useRef(null);
 
@@ -25,7 +26,10 @@ const Navbar = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
-    try { setLogo(db.getLogo()); } catch(e){}
+    try { 
+      setLogo(db.getLogo()); 
+      setContact(db.getContact());
+    } catch(e){}
   }, [location.pathname]);
 
   const products = [
@@ -123,13 +127,13 @@ const Navbar = () => {
           {/* Right Section (Desktop) */}
           <div className="hidden lg:flex items-center gap-4">
             {/* Phone */}
-            <a href="tel:+917574948768" className="flex items-center gap-2 group">
+            <a href={`tel:${contact?.phone?.replace(/\s+/g, '') || '+917574948768'}`} className="flex items-center gap-2 group">
               <div className="w-9 h-9 rounded-full bg-teal-50 flex items-center justify-center group-hover:bg-teal-100 transition-colors">
                 <PhoneCall size={16} className="text-teal-600" />
               </div>
               <div>
                 <div className="text-[11px] font-bold text-slate-400 leading-tight">Expert Support</div>
-                <div className="text-[13px] font-bold text-slate-800 leading-tight">+91 75749 48768</div>
+                <div className="text-[13px] font-bold text-slate-800 leading-tight">{contact?.phone || '+91 75749 48768'}</div>
               </div>
             </a>
 
@@ -158,7 +162,7 @@ const Navbar = () => {
 
           {/* Mobile Hamburger */}
           <div className="flex items-center lg:hidden gap-3">
-            <a href="tel:+917574948768" className="w-9 h-9 rounded-full bg-teal-50 flex items-center justify-center">
+            <a href={`tel:${contact?.phone?.replace(/\s+/g, '') || '+917574948768'}`} className="w-9 h-9 rounded-full bg-teal-50 flex items-center justify-center">
               <PhoneCall size={16} className="text-teal-600" />
             </a>
             <button

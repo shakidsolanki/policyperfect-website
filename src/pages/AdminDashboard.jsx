@@ -244,11 +244,11 @@ const AdminDashboard = () => {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-900 border border-white/10 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md relative overflow-hidden"
+          className="bg-white/5 border-white/10 border border-white/10 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 rounded-full blur-2xl"></div>
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-brand-gold/10 border border-brand-gold/20 text-brand-gold rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Lock size={32} />
             </div>
             <h2 className="text-2xl font-black text-white">Admin Portal</h2>
@@ -269,7 +269,7 @@ const AdminDashboard = () => {
                   type="text" 
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all font-medium"
                   placeholder="admin@policyperfect"
                 />
               </div>
@@ -282,14 +282,14 @@ const AdminDashboard = () => {
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all font-medium"
                   placeholder="••••••••"
                 />
               </div>
             </div>
             <button 
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-500/20 transition-all"
+              className="w-full bg-brand-gold text-brand-navy font-bold py-3.5 rounded-xl shadow-lg shadow-brand-gold/20 transition-all"
             >
               Sign In
             </button>
@@ -303,10 +303,10 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans pb-24">
       {/* Top Navbar */}
-      <div className="bg-slate-900 border-b border-white/10 px-4 py-5 sm:px-6 lg:px-8">
+      <div className="bg-white/5 border-white/10 border-b border-white/10 px-4 py-5 sm:px-6 lg:px-8">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-brand-gold text-brand-navy flex items-center justify-center">
               <Database className="text-white" size={24} />
             </div>
             <div>
@@ -342,8 +342,8 @@ const AdminDashboard = () => {
                 onClick={() => { setActiveTab(tab.id); setSearchTerm(''); setCmSaveMsg(''); }}
                 className={`w-full flex items-center gap-3.5 px-5 py-4 rounded-2xl font-bold text-sm transition-all text-left ${
                   activeTab === tab.id
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                    : 'bg-slate-900 border border-white/10 hover:bg-slate-800 text-slate-400 hover:text-slate-100'
+                    ? 'bg-brand-gold text-brand-navy shadow-lg shadow-brand-gold/20'
+                    : 'bg-white/5 border-white/10 border border-white/10 hover:bg-slate-800 text-slate-400 hover:text-slate-100'
                 }`}
               >
                 <tab.icon size={18} />
@@ -370,15 +370,15 @@ const AdminDashboard = () => {
                       placeholder="Search name, product, mobile..." 
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-slate-200 outline-none focus:border-blue-500 text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-white/5 border-white/10 border border-white/10 rounded-xl text-slate-200 outline-none focus:border-brand-gold text-sm"
                     />
                   </div>
                 </div>
 
-                <div className="bg-slate-900 border border-white/10 rounded-[2rem] overflow-hidden">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2rem] overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-slate-400">
-                      <thead className="bg-slate-950 text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
+                      <thead className="bg-brand-navy-light text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
                         <tr>
                           <th className="px-6 py-4">Date</th>
                           <th className="px-6 py-4">Product</th>
@@ -393,14 +393,14 @@ const AdminDashboard = () => {
                             <tr key={l.id} className="hover:bg-white/5 transition-colors">
                               <td className="px-6 py-4 text-xs text-slate-500 whitespace-nowrap">{l.date}</td>
                               <td className="px-6 py-4">
-                                <span className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded text-[11px]">
+                                <span className="bg-brand-gold/10 text-brand-gold border border-brand-gold/20 px-2.5 py-0.5 rounded text-[11px]">
                                   {l.productType}
                                 </span>
                               </td>
                               <td className="px-6 py-4 text-slate-200">{l.name}</td>
                               <td className="px-6 py-4">{l.mobile}</td>
                               <td className="px-6 py-4 text-right whitespace-nowrap">
-                                <button onClick={() => setSelectedLead(l)} className="text-blue-400 hover:text-white p-2 rounded-lg bg-white/5 hover:bg-blue-600 transition-all mr-2">
+                                <button onClick={() => setSelectedLead(l)} className="text-brand-gold hover:text-white p-2 rounded-lg bg-white/5 hover:bg-brand-gold text-brand-navy transition-all mr-2">
                                   <Eye size={16} />
                                 </button>
                                 <button onClick={() => handleDeleteLead(l.id)} className="text-red-400 hover:text-white p-2 rounded-lg bg-white/5 hover:bg-red-600 transition-all">
@@ -428,14 +428,14 @@ const AdminDashboard = () => {
                   <h2 className="text-xl font-black">Active Policies</h2>
                   <button 
                     onClick={() => setShowAddPolicy(!showAddPolicy)}
-                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs flex items-center gap-2 transition-all"
+                    className="px-4 py-2.5 bg-brand-gold text-brand-navy font-bold rounded-xl text-xs flex items-center gap-2 transition-all"
                   >
                     <Plus size={16} /> Create Policy
                   </button>
                 </div>
 
                 {showAddPolicy && (
-                  <form onSubmit={handleAddPolicySubmit} className="bg-slate-900 border border-white/10 p-6 rounded-3xl space-y-4">
+                  <form onSubmit={handleAddPolicySubmit} className="bg-white/5 border-white/10 border border-white/10 p-6 rounded-3xl space-y-4">
                     <h3 className="font-bold text-white mb-2">Policy Creation Form</h3>
                     <div className="grid md:grid-cols-3 gap-4">
                       <div>
@@ -452,7 +452,7 @@ const AdminDashboard = () => {
                       </div>
                       <div>
                         <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Partner Insurer</label>
-                        <select className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-white" value={newPolicy.insurer} onChange={(e) => setNewPolicy({...newPolicy, insurer: e.target.value})}>
+                        <select className="w-full px-3 py-2 bg-brand-navy-light border border-white/10 rounded-lg text-white" value={newPolicy.insurer} onChange={(e) => setNewPolicy({...newPolicy, insurer: e.target.value})}>
                           <option value="HDFC ERGO">HDFC ERGO</option>
                           <option value="ICICI Lombard">ICICI Lombard</option>
                           <option value="Star Health">Star Health</option>
@@ -462,7 +462,7 @@ const AdminDashboard = () => {
                       </div>
                       <div>
                         <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Product Category</label>
-                        <select className="w-full px-3 py-2 bg-slate-950 border border-white/10 rounded-lg text-white" value={newPolicy.productType} onChange={(e) => setNewPolicy({...newPolicy, productType: e.target.value})}>
+                        <select className="w-full px-3 py-2 bg-brand-navy-light border border-white/10 rounded-lg text-white" value={newPolicy.productType} onChange={(e) => setNewPolicy({...newPolicy, productType: e.target.value})}>
                           <option value="Motor Insurance">Motor Insurance</option>
                           <option value="Health Insurance">Health Insurance</option>
                           <option value="Term Life Insurance">Term Life Insurance</option>
@@ -491,16 +491,16 @@ const AdminDashboard = () => {
                         <input type="date" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.endDate} onChange={(e) => setNewPolicy({...newPolicy, endDate: e.target.value})} />
                       </div>
                     </div>
-                    <button type="submit" className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition-colors">
+                    <button type="submit" className="px-6 py-2.5 bg-brand-gold text-brand-navy font-bold rounded-xl text-xs transition-colors">
                       Register Policy
                     </button>
                   </form>
                 )}
 
-                <div className="bg-slate-900 border border-white/10 rounded-[2rem] overflow-hidden">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2rem] overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-slate-400">
-                      <thead className="bg-slate-950 text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
+                      <thead className="bg-brand-navy-light text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
                         <tr>
                           <th className="px-6 py-4">Policy No</th>
                           <th className="px-6 py-4">Customer</th>
@@ -542,10 +542,10 @@ const AdminDashboard = () => {
             {activeTab === 'endorsements' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-black">Endorsement / Policy Update Requests</h2>
-                <div className="bg-slate-900 border border-white/10 rounded-[2rem] overflow-hidden">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2rem] overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-slate-400">
-                      <thead className="bg-slate-950 text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
+                      <thead className="bg-brand-navy-light text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
                         <tr>
                           <th className="px-6 py-4">Date</th>
                           <th className="px-6 py-4">Policy No</th>
@@ -604,12 +604,12 @@ const AdminDashboard = () => {
                 <h2 className="text-xl font-black">Claim Intimation Logs</h2>
                 <div className="space-y-4">
                   {claims.length === 0 ? (
-                    <div className="bg-slate-900 border border-white/10 rounded-3xl p-12 text-center text-slate-500 font-semibold">
+                    <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-12 text-center text-slate-500 font-semibold">
                       No claims reported yet.
                     </div>
                   ) : (
                     claims.map((c) => (
-                      <div key={c.id} className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                      <div key={c.id} className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
                         <div className="flex justify-between items-start border-b border-white/5 pb-4">
                           <div>
                             <span className="bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -629,7 +629,7 @@ const AdminDashboard = () => {
                           {c.witnessContact && <div><span className="block text-[10px] text-slate-500 mb-1">CONTACTS</span><span className="text-slate-200">{c.witnessContact}</span></div>}
                         </div>
 
-                        <div className="bg-slate-950 p-4 rounded-xl border border-white/5">
+                        <div className="bg-brand-navy-light p-4 rounded-xl border border-white/5">
                           <span className="block text-[10px] font-bold text-slate-500 mb-1">INCIDENT DESCRIPTION</span>
                           <p className="text-slate-300 text-xs font-semibold leading-relaxed">{c.description}</p>
                         </div>
@@ -644,7 +644,7 @@ const AdminDashboard = () => {
             {activeTab === 'chats' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-black">Live Support Messages</h2>
-                <div className="flex bg-slate-900 border border-white/10 rounded-[2.5rem] overflow-hidden min-h-[500px]">
+                <div className="flex bg-white/5 border-white/10 border border-white/10 rounded-[2.5rem] overflow-hidden min-h-[500px]">
                   
                   {/* Active Chats List */}
                   <div className="w-1/3 border-r border-white/10 flex flex-col">
@@ -671,13 +671,13 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* Active Chat Window */}
-                  <div className="w-2/3 flex flex-col justify-between bg-slate-950/40">
+                  <div className="w-2/3 flex flex-col justify-between bg-brand-navy-light/40">
                     {activeChatId ? (() => {
                       const chat = chats.find(c => c.mobile === activeChatId);
                       return (
                         <>
                           {/* Chat Header */}
-                          <div className="p-4 border-b border-white/10 flex justify-between items-center bg-slate-900">
+                          <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/5 border-white/10">
                             <div>
                               <div className="font-bold text-white text-sm">{chat.name || 'Customer'}</div>
                               <div className="text-[10px] text-slate-400">Mobile: {chat.mobile}</div>
@@ -689,7 +689,7 @@ const AdminDashboard = () => {
                             {chat.messages.map((m, idx) => (
                               <div key={idx} className={`flex flex-col ${m.sender === 'admin' ? 'items-end' : 'items-start'}`}>
                                 <div className={`px-4 py-2.5 rounded-2xl max-w-sm text-xs font-semibold leading-relaxed ${
-                                  m.sender === 'admin' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-900 border border-white/10 text-slate-200 rounded-tl-none'
+                                  m.sender === 'admin' ? 'bg-brand-gold text-brand-navy rounded-tr-none' : 'bg-white/5 border-white/10 border border-white/10 text-slate-200 rounded-tl-none'
                                 }`}>
                                   {m.text}
                                   {m.fileName && (
@@ -704,15 +704,15 @@ const AdminDashboard = () => {
                           </div>
 
                           {/* Chat Input */}
-                          <form onSubmit={handleSendChatReply} className="p-4 border-t border-white/10 bg-slate-900 flex gap-3">
+                          <form onSubmit={handleSendChatReply} className="p-4 border-t border-white/10 bg-white/5 border-white/10 flex gap-3">
                             <input 
                               type="text" 
                               placeholder="Type your reply here..." 
                               value={chatReplyText}
                               onChange={(e) => setChatReplyText(e.target.value)}
-                              className="flex-grow px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-blue-500 text-xs font-medium"
+                              className="flex-grow px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold text-xs font-medium"
                             />
-                            <button type="submit" className="px-5 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-xs text-white transition-all">
+                            <button type="submit" className="px-5 bg-brand-gold text-brand-navy transition-all">
                               Send
                             </button>
                           </form>
@@ -731,7 +731,7 @@ const AdminDashboard = () => {
 
             {/* TAB 6: BANNER SETTINGS */}
             {activeTab === 'banner' && (
-              <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] p-8 max-w-2xl">
+              <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2.5rem] p-8 max-w-2xl">
                 <h2 className="text-xl font-black mb-1">Homepage Hero Banner Control</h2>
                 <p className="text-xs text-slate-400 mb-6 font-semibold">Change the main image and redirect URL of the website's Hero section.</p>
 
@@ -744,7 +744,7 @@ const AdminDashboard = () => {
                       placeholder="Enter image URL (e.g. Unsplash URL)"
                       value={banner.imageUrl}
                       onChange={(e) => setBanner({...banner, imageUrl: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-blue-500 text-xs font-medium"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold text-xs font-medium"
                     />
                     {banner.imageUrl && (
                       <img src={banner.imageUrl} alt="Preview" className="mt-3 h-32 rounded-xl object-cover w-full opacity-80" onError={(e)=>e.target.style.display='none'} />
@@ -759,13 +759,13 @@ const AdminDashboard = () => {
                       placeholder="e.g. /claims or external https link"
                       value={banner.redirectUrl}
                       onChange={(e) => setBanner({...banner, redirectUrl: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-blue-500 text-xs font-medium"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold text-xs font-medium"
                     />
                   </div>
 
                   <button 
                     type="submit"
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition-colors"
+                    className="px-6 py-3 bg-brand-gold text-brand-navy font-bold rounded-xl text-xs transition-colors"
                   >
                     Save Banner Changes
                   </button>
@@ -789,7 +789,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SECTION 1: Announcement Bar */}
-                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
                   <div className="flex items-center gap-2 mb-1">
                     <Bell size={16} className="text-teal-400" />
                     <h3 className="font-black text-white text-sm">Announcement Bar</h3>
@@ -851,7 +851,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SECTION 2: Offer Cards */}
-                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
                   <div className="flex items-center gap-2 mb-1">
                     <Tag size={16} className="text-amber-400" />
                     <h3 className="font-black text-white text-sm">Offer / Promo Cards</h3>
@@ -910,18 +910,18 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SECTION 3: Quick Links */}
-                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <LinkIcon size={16} className="text-blue-400" />
+                    <LinkIcon size={16} className="text-brand-gold" />
                     <h3 className="font-black text-white text-sm">Quick Links Bar</h3>
                     <span className="text-[10px] text-slate-400 font-semibold">(Shown below hero section)</span>
                   </div>
                   {quickLinks.map((ql, idx) => (
                     <div key={ql.id||idx} className="flex items-center gap-3">
                       <input type="text" value={ql.label} onChange={e=>{ const u=[...quickLinks]; u[idx]={...u[idx],label:e.target.value}; setQuickLinks(u); }}
-                        placeholder="Label" className="w-1/3 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-blue-500" />
+                        placeholder="Label" className="w-1/3 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-brand-gold" />
                       <input type="text" value={ql.link} onChange={e=>{ const u=[...quickLinks]; u[idx]={...u[idx],link:e.target.value}; setQuickLinks(u); }}
-                        placeholder="Link (e.g. /renew or tel:+91...)" className="flex-1 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-blue-500" />
+                        placeholder="Link (e.g. /renew or tel:+91...)" className="flex-1 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-brand-gold" />
                       <button onClick={() => setQuickLinks(quickLinks.filter((_,i)=>i!==idx))} className="w-8 h-8 flex items-center justify-center bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors flex-shrink-0">
                         <X size={13} />
                       </button>
@@ -934,7 +934,7 @@ const AdminDashboard = () => {
                       <Plus size={13}/> Add Link
                     </button>
                     <button onClick={() => { db.setQuickLinks(quickLinks); setCmSaveMsg('Quick links saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                      className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs transition-colors"
+                      className="flex items-center gap-2 px-5 py-2 bg-brand-gold text-brand-navy font-bold rounded-lg text-xs transition-colors"
                     >
                       <Save size={13}/> Save Links
                     </button>
@@ -942,7 +942,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SECTION 4: Contact Info */}
-                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
                   <div className="flex items-center gap-2 mb-1">
                     <Phone size={16} className="text-green-400" />
                     <h3 className="font-black text-white text-sm">Contact Information</h3>
@@ -967,7 +967,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SECTION 5: Site Logo */}
-                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
                   <div className="flex items-center gap-2 mb-1">
                     <Image size={16} className="text-purple-400" />
                     <h3 className="font-black text-white text-sm">Site Logo Configuration</h3>
@@ -1001,7 +1001,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SECTION 6: About Us */}
-                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
+                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
                   <div className="flex items-center gap-2 mb-1">
                     <FileText size={16} className="text-pink-400" />
                     <h3 className="font-black text-white text-sm">About Us Details</h3>
@@ -1031,11 +1031,11 @@ const AdminDashboard = () => {
 
       {/* Leads view detail modal popup */}
       {selectedLead && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            <div className="bg-slate-950 text-white px-6 py-4 flex justify-between items-center border-b border-white/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-navy-light/70 backdrop-blur-sm">
+          <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div className="bg-brand-navy-light text-white px-6 py-4 flex justify-between items-center border-b border-white/10">
               <div>
-                <span className="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">{selectedLead.productType}</span>
+                <span className="bg-brand-gold text-brand-navy text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">{selectedLead.productType}</span>
                 <h3 className="text-lg font-black mt-1">Lead Details (Ref: {selectedLead.id})</h3>
               </div>
               <button onClick={() => setSelectedLead(null)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-slate-300 hover:text-white">
@@ -1059,7 +1059,7 @@ const AdminDashboard = () => {
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Vehicle Make/Model</span><span>{selectedLead.make} {selectedLead.model}</span></div>
                     {selectedLead.variant && <div><span className="font-bold text-slate-500 block text-xs uppercase">Variant</span><span>{selectedLead.variant}</span></div>}
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Fuel & Year</span><span>{selectedLead.fuelType} ({selectedLead.mfgYear})</span></div>
-                    {selectedLead.regNo && <div><span className="font-bold text-slate-500 block text-xs uppercase">Registration No</span><span className="text-blue-400 font-bold">{selectedLead.regNo}</span></div>}
+                    {selectedLead.regNo && <div><span className="font-bold text-slate-500 block text-xs uppercase">Registration No</span><span className="text-brand-gold font-bold">{selectedLead.regNo}</span></div>}
                   </div>
                 </div>
               )}
@@ -1090,7 +1090,7 @@ const AdminDashboard = () => {
               )}
             </div>
             
-            <div className="bg-slate-950 px-6 py-4 border-t border-white/10 flex justify-end">
+            <div className="bg-brand-navy-light px-6 py-4 border-t border-white/10 flex justify-end">
               <button onClick={() => setSelectedLead(null)} className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition-colors">
                 Close
               </button>

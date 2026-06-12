@@ -130,7 +130,7 @@ const MotorInsurance = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-[#012e67] text-white rounded-xl font-bold hover:bg-blue-900 transition-all shadow-lg shadow-blue-900/15"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-primary-500 text-white rounded-xl font-bold hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/15"
               >
                 Get Instant Quote <ArrowRight size={18} />
               </button>
@@ -151,7 +151,7 @@ const MotorInsurance = () => {
                 { label: 'No-Claim Bonus', sub: 'Benefits', icon: Percent }
               ].map((badge, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-primary-50 text-primary-500 flex items-center justify-center flex-shrink-0">
                     <badge.icon size={16} />
                   </div>
                   <div className="text-[10px] leading-tight">
@@ -261,7 +261,7 @@ const MotorInsurance = () => {
                 onClick={() => setIsModalOpen(true)}
                 className={`w-full py-3 rounded-xl font-bold text-sm mt-8 transition-colors ${
                   plan.featured 
-                    ? 'bg-[#012e67] text-white hover:bg-blue-900 shadow-md' 
+                    ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-md' 
                     : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
@@ -305,12 +305,12 @@ const MotorInsurance = () => {
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: NCB Box */}
-          <div className="bg-[#012e67] text-white p-8 rounded-3xl space-y-6 shadow-xl relative overflow-hidden">
+          <div className="bg-primary-500 text-white p-8 rounded-3xl space-y-6 shadow-xl relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
             <div className="space-y-2">
-              <span className="text-xs font-bold text-blue-300 uppercase tracking-widest">No Claim Bonus (NCB)</span>
+              <span className="text-xs font-bold text-accent-100 uppercase tracking-widest">No Claim Bonus (NCB)</span>
               <h3 className="text-2xl font-black">NCB Explained Simply</h3>
-              <p className="text-sm text-blue-200">Claim-free years give premium discounts.</p>
+              <p className="text-sm text-accent-50/80">Claim-free years give premium discounts.</p>
             </div>
             
             <div className="bg-white/10 rounded-2xl overflow-hidden border border-white/10">
@@ -388,7 +388,7 @@ const MotorInsurance = () => {
               { step: '5', title: 'Claim Settlement', desc: 'Claim is settled directly with garage.' }
             ].map((s, idx) => (
               <div key={idx} className="relative text-center space-y-2">
-                <div className="w-12 h-12 rounded-full bg-[#012e67] text-white flex items-center justify-center font-extrabold mx-auto text-lg shadow-md">
+                <div className="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center font-extrabold mx-auto text-lg shadow-md">
                   {s.step}
                 </div>
                 <h4 className="font-extrabold text-slate-800 text-sm">{s.title}</h4>
@@ -404,16 +404,16 @@ const MotorInsurance = () => {
 
       {/* Bottom CTA Banner */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="bg-gradient-to-r from-blue-700 to-[#012e67] text-white rounded-3xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden shadow-xl">
+        <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-3xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden shadow-xl">
           <div className="absolute -bottom-20 -left-20 w-88 h-88 bg-white/5 rounded-full blur-3xl"></div>
           <div className="max-w-xl mx-auto space-y-3 relative z-10">
             <h2 className="text-3xl md:text-4xl font-black">Ready to Protect Your Vehicle?</h2>
-            <p className="text-blue-200 font-semibold text-sm md:text-base">Compare quotes from top insurers and save up to 80% on your premium instantly.</p>
+            <p className="text-accent-50 font-semibold text-sm md:text-base">Compare quotes from top insurers and save up to 80% on your premium instantly.</p>
           </div>
           <div className="flex justify-center relative z-10">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="bg-white text-[#012e67] font-black px-8 py-4 rounded-xl hover:bg-slate-100 transition-colors shadow-lg"
+              className="bg-accent-500 text-primary-500 font-black px-8 py-4 rounded-xl hover:bg-accent-600 transition-colors shadow-lg"
             >
               Get Instant Premium Quote
             </button>

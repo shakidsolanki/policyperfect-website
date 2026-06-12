@@ -47,9 +47,9 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
-            <Link to="/renew" className="font-semibold text-[15px] text-slate-700 hover:text-[#1e3a8a] transition-colors">Renew Policy</Link>
-            <Link to="/claims" className="font-semibold text-[15px] text-slate-700 hover:text-[#1e3a8a] transition-colors">Claim Support</Link>
-            <Link to="/login" className="font-semibold text-[15px] text-slate-700 hover:text-[#1e3a8a] transition-colors">Customer Portal</Link>
+            <Link to="/renew" className="font-extrabold text-[14px] uppercase tracking-wider text-slate-700 hover:text-primary-500 transition-colors">Renew Policy</Link>
+            <Link to="/claims" className="font-extrabold text-[14px] uppercase tracking-wider text-slate-700 hover:text-primary-500 transition-colors">Claim Support</Link>
+            <Link to="/login" className="font-extrabold text-[14px] uppercase tracking-wider text-slate-700 hover:text-primary-500 transition-colors">Customer Portal</Link>
           </div>
 
           {/* Right Section (Desktop) */}
@@ -57,25 +57,25 @@ const Navbar = () => {
             
             {/* Contact Info */}
             <div className="text-right">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Expert Support</div>
-              <div className="font-bold text-[#1e3a8a] text-[15px]">+91 75749 48768</div>
-              <div className="text-[10px] text-slate-500">support@policyperfect.co.in</div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Expert Support</div>
+              <div className="font-bold text-primary-500 text-[15px]">+91 75749 48768</div>
+              <div className="text-[10px] text-slate-400 font-bold">support@policyperfect.co.in</div>
             </div>
 
             {/* Buttons */}
             <div className="flex items-center space-x-3">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/admin" className="flex items-center gap-2 px-5 py-2.5 border-2 border-slate-200 rounded-lg text-slate-700 font-semibold text-sm hover:border-[#1e3a8a] hover:text-[#1e3a8a] transition-colors">
-                  <User size={18} />
+                <Link to="/admin" className="flex items-center gap-2 px-5 py-2.5 border-2 border-slate-200 rounded-lg text-slate-700 font-bold text-xs uppercase tracking-wider hover:border-primary-500 hover:text-primary-500 transition-colors">
+                  <User size={16} />
                   Admin Portal
                 </Link>
               </motion.div>
               <motion.button 
                 whileHover={{ scale: 1.05 }} 
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[#1e3a8a] text-white rounded-lg font-semibold text-sm hover:bg-blue-900 transition-colors shadow-lg shadow-blue-900/20"
+                className="flex items-center gap-2 px-5 py-2.5 bg-accent-500 text-primary-500 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-accent-600 transition-colors shadow-lg shadow-accent-500/10"
               >
-                <PhoneCall size={18} />
+                <PhoneCall size={16} />
                 Talk to Expert
               </motion.button>
             </div>
@@ -85,7 +85,7 @@ const Navbar = () => {
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-slate-600 hover:text-[#1e3a8a] focus:outline-none p-2"
+              className="text-slate-600 hover:text-primary-500 focus:outline-none p-2"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -104,15 +104,15 @@ const Navbar = () => {
           >
             <div className="px-4 py-4 space-y-2">
               <div className="pb-4 mb-4 border-b border-slate-100">
-                <div className="text-xs font-bold text-slate-500 uppercase mb-1">Expert Support</div>
-                <div className="font-bold text-[#1e3a8a]">+91 75749 48768</div>
-                <div className="text-sm text-slate-500">support@policyperfect.co.in</div>
+                <div className="text-xs font-bold text-slate-400 uppercase mb-1">Expert Support</div>
+                <div className="font-bold text-primary-500">+91 75749 48768</div>
+                <div className="text-xs text-slate-500 font-bold">support@policyperfect.co.in</div>
               </div>
               
-              <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-semibold text-slate-800 hover:bg-slate-50">Home</Link>
-              <Link to="/renew" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-semibold text-slate-800 hover:bg-slate-50">Renew Policy</Link>
-              <Link to="/claims" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-semibold text-slate-800 hover:bg-slate-50">Claim Support</Link>
-              <Link to="/login" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-semibold text-slate-800 hover:bg-slate-50">Customer Portal</Link>
+              <Link to="/" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-extrabold text-slate-800 hover:bg-slate-50 hover:text-primary-500">Home</Link>
+              <Link to="/renew" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-extrabold text-slate-800 hover:bg-slate-50 hover:text-primary-500">Renew Policy</Link>
+              <Link to="/claims" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-extrabold text-slate-800 hover:bg-slate-50 hover:text-primary-500">Claim Support</Link>
+              <Link to="/login" onClick={() => setIsOpen(false)} className="block px-3 py-3 rounded-lg text-base font-extrabold text-slate-800 hover:bg-slate-50 hover:text-primary-500">Customer Portal</Link>
               
               <div className="px-3 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Products</div>
               {products.map((product) => (
@@ -120,17 +120,17 @@ const Navbar = () => {
                   key={product.name}
                   to={product.path}
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-50 pl-6"
+                  className="block px-3 py-2.5 rounded-lg text-sm font-bold text-slate-600 hover:text-primary-500 hover:bg-slate-50 pl-6"
                 >
                   {product.name}
                 </Link>
               ))}
               
               <div className="pt-4 mt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
-                <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-slate-200 rounded-lg text-slate-700 font-semibold text-sm">
+                <Link to="/admin" onClick={() => setIsOpen(false)} className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-slate-200 rounded-lg text-slate-700 font-bold text-xs uppercase tracking-wider">
                   Admin Portal
                 </Link>
-                <button className="flex items-center justify-center gap-2 px-4 py-3 bg-[#1e3a8a] text-white rounded-lg font-semibold text-sm">
+                <button className="flex items-center justify-center gap-2 px-4 py-3 bg-accent-500 text-primary-500 rounded-lg font-bold text-xs uppercase tracking-wider">
                   Talk to Expert
                 </button>
               </div>

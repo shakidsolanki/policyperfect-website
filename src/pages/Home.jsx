@@ -93,7 +93,7 @@ const Home = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#1c2237] font-sans overflow-x-hidden">
+    <div className="w-full min-h-screen bg-white font-sans overflow-x-hidden">
       <SEO 
         title="PolicyPerfect Insurance | Compare &amp; Buy Best Insurance Plans Online"
         description="Compare and buy cheap insurance policies instantly in India. PolicyPerfect offers Health, Life, Motor, Travel, and Cyber insurance. Get a free quote today!"
@@ -106,7 +106,7 @@ const Home = () => {
       </script>
       
       {/* Hero Section */}
-      <section className="relative pt-20 pb-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto">
+      <section className="relative pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto bg-gradient-to-br from-slate-50 via-white to-accent-50/10 rounded-b-[3rem]">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
           
           {/* Left Content */}
@@ -115,10 +115,10 @@ const Home = () => {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 border border-white/10 bg-white/5 px-4 py-2 rounded-full mb-8"
+              className="inline-flex items-center gap-2 border border-slate-200 bg-slate-100/70 px-4 py-2 rounded-full mb-8 shadow-sm"
             >
-              <Star size={14} className="text-yellow-500 fill-yellow-500" />
-              <span className="text-xs font-semibold text-slate-300 tracking-wider">TRUSTED BY 2 LAKH+ CUSTOMERS</span>
+              <Star size={14} className="text-accent-500 fill-accent-500" />
+              <span className="text-[10px] sm:text-xs font-black text-slate-600 tracking-wider">TRUSTED BY 2 LAKH+ CUSTOMERS</span>
             </motion.div>
 
             {/* Main Heading */}
@@ -126,10 +126,10 @@ const Home = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-5xl lg:text-[4rem] font-black text-white leading-[1.1] mb-6 tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-[3.8rem] font-black text-primary-500 leading-[1.1] mb-6 tracking-tight"
             >
               Compare & Save on <br />
-              <span className="text-[#38bdf8]">Insurance Policies</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-accent-500 to-accent-600">Insurance Policies</span>
             </motion.h1>
 
             {/* Subheading */}
@@ -137,7 +137,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-lg text-slate-400 mb-10 max-w-xl leading-relaxed"
+              className="text-base sm:text-lg text-slate-500 mb-10 max-w-xl leading-relaxed font-medium"
             >
               Get the best quotes from top insurers instantly. Zero hidden charges, 100% reliable support, and guaranteed lowest premiums.
             </motion.p>
@@ -150,11 +150,11 @@ const Home = () => {
               className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-12"
             >
               {stats.map((stat, idx) => (
-                <div key={idx} className="flex items-center gap-3 border border-white/10 rounded-xl p-3 bg-white/5">
-                  <stat.icon size={18} className="text-blue-400" />
+                <div key={idx} className="flex items-center gap-3 border border-slate-100 rounded-xl p-3 bg-white shadow-md">
+                  <stat.icon size={18} className="text-accent-500" />
                   <div>
-                    <div className="text-sm font-bold text-white leading-tight">{stat.value}</div>
-                    <div className="text-[10px] text-slate-400 leading-tight">{stat.label}</div>
+                    <div className="text-sm font-black text-primary-500 leading-tight">{stat.value}</div>
+                    <div className="text-[10px] text-slate-400 font-bold leading-tight">{stat.label}</div>
                   </div>
                 </div>
               ))}
@@ -166,19 +166,19 @@ const Home = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <h3 className="text-xs font-bold text-slate-500 tracking-widest uppercase mb-5">
+              <h3 className="text-xs font-black text-slate-400 tracking-widest uppercase mb-5">
                 SELECT INSURANCE TYPE
               </h3>
-              <div className="flex flex-wrap gap-4 lg:gap-6">
+              <div className="flex flex-wrap gap-6 lg:gap-8 justify-start">
                 {products.map((product, idx) => {
                   const Icon = product.icon;
                   return (
-                    <motion.div key={idx} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div key={idx} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}>
                       <Link to={product.path} onClick={(e) => handleProductClick(product, e)} className="flex flex-col items-center gap-3 group">
-                        <div className={`w-20 h-20 rounded-3xl ${product.color} flex items-center justify-center shadow-lg transition-transform group-hover:-translate-y-2 group-hover:shadow-2xl`}>
-                          <Icon size={32} className="text-white" strokeWidth={2} />
+                        <div className="w-18 h-18 rounded-full bg-white border border-slate-200/80 flex items-center justify-center shadow-md transition-all duration-300 group-hover:border-accent-500 group-hover:shadow-xl group-hover:shadow-accent-500/10 group-hover:-translate-y-1">
+                          <Icon size={28} className="text-primary-500 group-hover:text-accent-500 transition-colors" strokeWidth={2.2} />
                         </div>
-                        <span className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">
+                        <span className="text-xs font-black text-slate-700 group-hover:text-primary-500 transition-colors tracking-wide">
                           {product.name}
                         </span>
                       </Link>
@@ -191,7 +191,7 @@ const Home = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 text-sm font-bold text-[#38bdf8] hover:text-blue-300 transition-colors"
+                  className="flex items-center gap-2 text-sm font-black text-accent-600 hover:text-accent-700 transition-colors"
                 >
                   View All Products <ArrowRight size={16} />
                 </motion.button>
@@ -205,31 +205,31 @@ const Home = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="relative w-full aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl"
+              className="relative w-full aspect-[4/3] rounded-[2rem] overflow-hidden border border-slate-200 shadow-2xl"
             >
               {/* Main Image */}
               <a href={banner.redirectUrl || '#'} className="block w-full h-full cursor-pointer">
                 <img 
                   src={banner.imageUrl || "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&q=80&w=1200"} 
                   alt="Family Insurance Protection" 
-                  className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover opacity-95 hover:scale-105 transition-transform duration-500"
                 />
               </a>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1c2237]/80 to-transparent pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent pointer-events-none"></div>
 
               {/* Floating Badge 1 (Top Right) */}
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
-                className="absolute top-6 right-6 bg-white rounded-2xl p-3 flex items-center gap-3 shadow-xl"
+                className="absolute top-6 right-6 bg-white/95 backdrop-blur-md border border-slate-200/50 rounded-2xl p-3 flex items-center gap-3 shadow-xl"
               >
-                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
-                  <Percent size={18} className="text-blue-600" />
+                <div className="w-10 h-10 rounded-full bg-accent-50 flex items-center justify-center">
+                  <Percent size={18} className="text-accent-600" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-slate-800 leading-tight">Save up to 40%</div>
-                  <div className="text-[11px] text-slate-500">vs direct purchase</div>
+                  <div className="text-sm font-black text-slate-800 leading-tight">Save up to 40%</div>
+                  <div className="text-[11px] text-slate-500 font-semibold">vs direct purchase</div>
                 </div>
               </motion.div>
 
@@ -238,20 +238,20 @@ const Home = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 }}
-                className="absolute bottom-6 left-6 bg-white rounded-2xl p-4 flex items-center gap-3 shadow-xl"
+                className="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md border border-slate-200/50 rounded-2xl p-4 flex items-center gap-3 shadow-xl"
               >
-                <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center">
-                  <ShieldCheck size={20} className="text-green-500" />
+                <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center">
+                  <ShieldCheck size={20} className="text-emerald-500" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-slate-800 leading-tight">100% Secure</div>
-                  <div className="text-[11px] text-slate-500">Information Privacy</div>
+                  <div className="text-sm font-black text-slate-800 leading-tight">100% Secure</div>
+                  <div className="text-[11px] text-slate-500 font-semibold">Information Privacy</div>
                 </div>
               </motion.div>
             </motion.div>
             
             {/* Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-accent-500/5 rounded-full blur-[100px] -z-10"></div>
           </div>
 
         </div>
@@ -284,13 +284,13 @@ const Home = () => {
               className="relative w-full max-w-5xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden z-10"
             >
               {/* Decorative Header Background */}
-              <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-br from-blue-600 to-[#1e3a8a] -z-10"></div>
-              <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+              <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-br from-primary-500 to-primary-600 -z-10"></div>
+              <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
               
               <div className="flex items-center justify-between p-8 border-b border-white/10">
                 <div className="text-white">
                   <h2 className="text-3xl font-black mb-1">Explore Our Plans</h2>
-                  <p className="text-blue-200 text-sm">Choose the perfect protection for your needs</p>
+                  <p className="text-accent-100 text-sm font-semibold">Choose the perfect protection for your needs</p>
                 </div>
                 <motion.button 
                   whileHover={{ scale: 1.1, rotate: 90 }}
@@ -328,12 +328,12 @@ const Home = () => {
                         <Link 
                           to={product.path} 
                           onClick={(e) => handleProductClick(product, e)}
-                          className="flex flex-col items-center gap-4 p-6 rounded-[2rem] bg-white hover:bg-slate-50 transition-colors group border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:-translate-y-1 block h-full"
+                          className="flex flex-col items-center gap-4 p-6 rounded-[2rem] bg-white hover:bg-slate-50 transition-all group border border-slate-100 hover:border-accent-500 hover:shadow-xl hover:-translate-y-1 block h-full"
                         >
-                          <div className={`w-20 h-20 rounded-2xl ${product.color} flex items-center justify-center shadow-md transition-transform group-hover:scale-110 group-hover:shadow-lg`}>
-                            <Icon size={32} className="text-white" strokeWidth={2} />
+                          <div className="w-18 h-18 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center shadow-sm transition-all group-hover:scale-115 group-hover:shadow-md group-hover:border-accent-500">
+                            <Icon size={26} className="text-primary-500 group-hover:text-accent-500 transition-colors" strokeWidth={2.2} />
                           </div>
-                          <span className="text-base font-bold text-slate-700 group-hover:text-blue-600 text-center">
+                          <span className="text-xs font-black text-slate-700 group-hover:text-primary-500 text-center tracking-wide">
                             {product.name}
                           </span>
                         </Link>

@@ -2,16 +2,27 @@ import React, { useState } from 'react';
 import { Heart, X, Shield, Info, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { db } from '../utils/db';
 
 const Footer = () => {
   const [activeModal, setActiveModal] = useState(null);
+  const [logo, setLogo] = useState({ url: '/logo-white.png', width: '150' });
+  const [aboutText, setAboutText] = useState('PolicyPerfect is India\'s premier online insurance comparison and advisory portal.');
+
+  React.useEffect(() => {
+    try { setLogo(db.getLogo()); } catch(e){}
+    try { 
+      const aboutData = db.getAbout();
+      if(aboutData && aboutData.text) setAboutText(aboutData.text); 
+    } catch(e){}
+  }, []);
 
   const modalContent = {
     about: {
       title: 'About PolicyPerfect',
       icon: Info,
       color: 'text-blue-500 bg-blue-50',
-      text: 'PolicyPerfect is India\'s premier online insurance comparison and advisory portal. Established with a vision to simplify insurance, we empower you to compare, choose, and buy the best insurance plans from 25+ top insurers in India. Our mission is to provide 100% transparent rates, zero hidden fees, and dedicated claim support when you need it most.'
+      text: aboutText
     },
     careers: {
       title: 'Join the PolicyPerfect Team',
@@ -60,7 +71,7 @@ const Footer = () => {
           
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center mb-4">
-              <img src="/logo-white.png" alt="Policy Perfect" className="h-9 w-auto object-contain" />
+              <img src={logo.url} alt="Policy Perfect" style={{ width: `${logo.width}px`, maxWidth: '100%' }} className="h-auto object-contain" />
             </Link>
             <p className="text-sm text-slate-400 mb-6 leading-relaxed">
               Compare and buy the best insurance policies online. We help you find the right coverage at the best price.
@@ -83,6 +94,7 @@ const Footer = () => {
               <li><a href="#" onClick={(e) => { e.preventDefault(); setActiveModal('about'); }} className="text-sm hover:text-blue-400 transition-colors">About Us</a></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); setActiveModal('careers'); }} className="text-sm hover:text-blue-400 transition-colors">Careers</a></li>
               <li><Link to="/claims" className="text-sm hover:text-blue-400 transition-colors">Contact Us</Link></li>
+              <li><Link to="/cashless" className="text-sm hover:text-blue-400 transition-colors">Cashless Network</Link></li>
               <li><a href="#" onClick={(e) => { e.preventDefault(); setActiveModal('partners'); }} className="text-sm hover:text-blue-400 transition-colors">Partners</a></li>
             </ul>
           </div>

@@ -130,7 +130,7 @@ const MotorInsurance = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-primary-500 text-white rounded-xl font-bold hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/15"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20"
               >
                 Get Instant Quote <ArrowRight size={18} />
               </button>
@@ -151,7 +151,7 @@ const MotorInsurance = () => {
                 { label: 'No-Claim Bonus', sub: 'Benefits', icon: Percent }
               ].map((badge, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-primary-50 text-primary-500 flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center flex-shrink-0">
                     <badge.icon size={16} />
                   </div>
                   <div className="text-[10px] leading-tight">
@@ -305,16 +305,16 @@ const MotorInsurance = () => {
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: NCB Box */}
-          <div className="bg-primary-500 text-white p-8 rounded-3xl space-y-6 shadow-xl relative overflow-hidden">
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
-            <div className="space-y-2">
-              <span className="text-xs font-bold text-accent-100 uppercase tracking-widest">No Claim Bonus (NCB)</span>
+          <div className="bg-[#0c1b33] text-white p-8 rounded-3xl space-y-6 shadow-xl relative overflow-hidden border border-slate-800">
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-500/20 rounded-full blur-3xl"></div>
+            <div className="space-y-2 relative z-10">
+              <span className="text-xs font-bold text-teal-400 uppercase tracking-widest">No Claim Bonus (NCB)</span>
               <h3 className="text-2xl font-black">NCB Explained Simply</h3>
-              <p className="text-sm text-accent-50/80">Claim-free years give premium discounts.</p>
+              <p className="text-sm text-slate-300">Claim-free years give premium discounts, but a claim resets it to 0%.</p>
             </div>
             
-            <div className="bg-white/10 rounded-2xl overflow-hidden border border-white/10">
-              <table className="w-full text-left text-xs text-blue-100">
+            <div className="bg-slate-900/50 rounded-2xl overflow-hidden border border-white/10 relative z-10">
+              <table className="w-full text-left text-xs text-slate-300">
                 <thead>
                   <tr className="border-b border-white/10 bg-white/5 font-extrabold text-white">
                     <th className="px-4 py-3">Claim-free Years</th>
@@ -322,15 +322,26 @@ const MotorInsurance = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 font-bold">
-                  <tr><td className="px-4 py-3">1 Year</td><td className="px-4 py-3 text-yellow-300">20%</td></tr>
-                  <tr><td className="px-4 py-3">2 Years</td><td className="px-4 py-3 text-yellow-300">25%</td></tr>
-                  <tr><td className="px-4 py-3">3 Years</td><td className="px-4 py-3 text-yellow-300">35%</td></tr>
-                  <tr><td className="px-4 py-3">4 Years</td><td className="px-4 py-3 text-yellow-300">45%</td></tr>
-                  <tr><td className="px-4 py-3">5 Years</td><td className="px-4 py-3 text-yellow-300">50% (Max)</td></tr>
+                  <tr><td className="px-4 py-3">1 Year</td><td className="px-4 py-3 text-teal-400">20%</td></tr>
+                  <tr><td className="px-4 py-3">2 Years</td><td className="px-4 py-3 text-teal-400">25%</td></tr>
+                  <tr><td className="px-4 py-3">3 Years</td><td className="px-4 py-3 text-teal-400">35%</td></tr>
+                  <tr><td className="px-4 py-3">4 Years</td><td className="px-4 py-3 text-teal-400">45%</td></tr>
+                  <tr><td className="px-4 py-3">5+ Years</td><td className="px-4 py-3 text-teal-400">50% (Max)</td></tr>
                 </tbody>
               </table>
             </div>
-            <p className="text-[10px] text-blue-300 font-medium">*NCB is applicable as per insurer policy terms.</p>
+
+            <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl relative z-10">
+              <div className="flex items-start gap-2">
+                <AlertTriangle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-[13px] font-bold text-red-100">When does NCB become 0%?</h4>
+                  <p className="text-[11px] font-medium text-red-200/80 mt-1 leading-relaxed">
+                    If you make even a single Own Damage claim during the policy year, your entire accumulated NCB drops to 0% upon renewal, meaning you lose the discount. You can buy an 'NCB Protect' add-on to save your NCB even after a claim!
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right: Covered / Not Covered */}
@@ -388,7 +399,7 @@ const MotorInsurance = () => {
               { step: '5', title: 'Claim Settlement', desc: 'Claim is settled directly with garage.' }
             ].map((s, idx) => (
               <div key={idx} className="relative text-center space-y-2">
-                <div className="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center font-extrabold mx-auto text-lg shadow-md">
+                <div className="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center font-extrabold mx-auto text-lg shadow-md shadow-teal-600/20">
                   {s.step}
                 </div>
                 <h4 className="font-extrabold text-slate-800 text-sm">{s.title}</h4>
@@ -404,16 +415,16 @@ const MotorInsurance = () => {
 
       {/* Bottom CTA Banner */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-3xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden shadow-xl">
-          <div className="absolute -bottom-20 -left-20 w-88 h-88 bg-white/5 rounded-full blur-3xl"></div>
+        <div className="bg-[#0c1b33] text-white rounded-3xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden shadow-xl border border-slate-800">
+          <div className="absolute -bottom-20 -left-20 w-88 h-88 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
           <div className="max-w-xl mx-auto space-y-3 relative z-10">
             <h2 className="text-3xl md:text-4xl font-black">Ready to Protect Your Vehicle?</h2>
-            <p className="text-accent-50 font-semibold text-sm md:text-base">Compare quotes from top insurers and save up to 80% on your premium instantly.</p>
+            <p className="text-slate-300 font-semibold text-sm md:text-base">Compare quotes from top insurers and save up to 80% on your premium instantly.</p>
           </div>
           <div className="flex justify-center relative z-10">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="bg-accent-500 text-primary-500 font-black px-8 py-4 rounded-xl hover:bg-accent-600 transition-colors shadow-lg"
+              className="bg-teal-500 text-white font-black px-8 py-4 rounded-xl hover:bg-teal-400 transition-colors shadow-lg shadow-teal-500/20"
             >
               Get Instant Premium Quote
             </button>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -18,11 +19,135 @@
   --color-brand-gold: #dfb15b;
   --color-brand-gold-dark: #cf9e3c;
   
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  
   --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-  background-color: #fafbfc;
+  background-color: #ffffff;
   color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrollbar */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Product card hover underline effect (like Probus reference) */
+.product-card-underline {
+  position: relative;
+}
+.product-card-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: linear-gradient(90deg, #14b8a6, #0c1b33);
+  border-radius: 2px;
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.product-card-underline:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Floating animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 5s ease-in-out infinite;
+}
+
+/* Icon teal gradient (like RenewBuy reference) */
+.icon-teal {
+  background: linear-gradient(135deg, #e0f7f5 0%, #ccf5f1 100%);
+  color: #0d9488;
+}
+
+/* Card shadow on hover */
+.card-hover {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 12px 40px -8px rgba(12, 27, 51, 0.12);
+  transform: translateY(-3px);
+}
+
+/* Marquee scroll for partner logos */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* Badge new tag */
+.badge-new {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Gradient text */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #0c1b33 0%, #1e40af 50%, #0d9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Lock, User, LogOut, Search, Trash2, Database, Eye, X, 
-  Plus, Check, MessageSquare, Image, ShieldAlert, FileText, CheckCircle 
+  Plus, Check, MessageSquare, Image, ShieldAlert, FileText, CheckCircle,
+  RefreshCw, Megaphone, Link as LinkIcon, Phone, Tag, ToggleLeft, ToggleRight,
+  Save, Bell, Layout, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { db } from '../utils/db';
 
@@ -19,9 +21,18 @@ const AdminDashboard = () => {
   const [claims, setClaims] = useState([]);
   const [chats, setChats] = useState([]);
   const [banner, setBanner] = useState({ imageUrl: '', redirectUrl: '' });
+
+  // Content Manager States
+  const [announcement, setAnnouncement] = useState({ enabled: false, text: '', type: 'info', link: '', linkText: 'Know More' });
+  const [offers, setOffers] = useState([]);
+  const [quickLinks, setQuickLinks] = useState([]);
+  const [contact, setContact] = useState({ phone: '', whatsapp: '', email: '', address: '' });
+  const [siteLogo, setSiteLogo] = useState({ url: '/logo.png', width: '180' });
+  const [aboutUs, setAboutUs] = useState({ text: '' });
+  const [cmSaveMsg, setCmSaveMsg] = useState('');
   
   // Navigation
-  const [activeTab, setActiveTab] = useState('leads'); // leads, policies, endorsements, claims, chats, banner
+  const [activeTab, setActiveTab] = useState('leads');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLead, setSelectedLead] = useState(null);
   
@@ -60,6 +71,14 @@ const AdminDashboard = () => {
     setClaims(db.getClaims());
     setChats(db.getChats());
     setBanner(db.getBanner());
+    try {
+      setAnnouncement(db.getAnnouncement ? db.getAnnouncement() : { enabled:false, text:'', type:'info', link:'', linkText:'Know More' });
+      setOffers(db.getOffers ? db.getOffers() : []);
+      setQuickLinks(db.getQuickLinks ? db.getQuickLinks() : []);
+      setContact(db.getContact ? db.getContact() : { phone:'', whatsapp:'', email:'', address:'' });
+      setSiteLogo(db.getLogo ? db.getLogo() : { url: '/logo.png', width: '180' });
+      setAboutUs(db.getAbout ? db.getAbout() : { text: '' });
+    } catch(_) {}
   };
 
   const handleLogin = (e) => {
@@ -309,17 +328,18 @@ const AdminDashboard = () => {
           
           {/* Left Navigation Menu */}
           <div className="w-full lg:w-1/4 space-y-2.5">
-            {[
-              { id: 'leads', title: `Leads (${leads.length})`, icon: FileText },
-              { id: 'policies', title: `Customer Policies (${policies.length})`, icon: Database },
-              { id: 'endorsements', title: `Endorsements (${endorsements.filter(e => e.status === 'Pending').length})`, icon: RefreshCw },
-              { id: 'claims', title: `Claims Intimated (${claims.length})`, icon: ShieldAlert },
-              { id: 'chats', title: `Live Chat Widget (${chats.length})`, icon: MessageSquare },
-              { id: 'banner', title: 'Banner Settings', icon: Image }
+            {[ 
+              { id: 'leads', icon: Database, label: 'Lead CRM', count: leads.length },
+              { id: 'policies', icon: ShieldAlert, label: 'Active Policies', count: policies.length },
+              { id: 'claims', icon: AlertCircle, label: 'Claims Intimated', count: claims.length },
+              { id: 'endorsements', icon: FileText, label: 'Endorsements', count: endorsements.filter(r => r.status==='Pending').length },
+              { id: 'chats', icon: MessageSquare, label: 'Support Chats', count: chats.length },
+              { id: 'content', icon: Layout, label: 'Content Manager' },
+              { id: 'banners', icon: Image, label: 'Homepage Banner' }
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setSearchTerm(''); }}
+                onClick={() => { setActiveTab(tab.id); setSearchTerm(''); setCmSaveMsg(''); }}
                 className={`w-full flex items-center gap-3.5 px-5 py-4 rounded-2xl font-bold text-sm transition-all text-left ${
                   activeTab === tab.id
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
@@ -328,6 +348,9 @@ const AdminDashboard = () => {
               >
                 <tab.icon size={18} />
                 {tab.title}
+                {tab.id === 'content' && (
+                  <span className="ml-auto text-[9px] font-black bg-teal-500 text-white px-1.5 py-0.5 rounded uppercase tracking-wider">New</span>
+                )}
               </button>
             ))}
           </div>
@@ -723,6 +746,9 @@ const AdminDashboard = () => {
                       onChange={(e) => setBanner({...banner, imageUrl: e.target.value})}
                       className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-blue-500 text-xs font-medium"
                     />
+                    {banner.imageUrl && (
+                      <img src={banner.imageUrl} alt="Preview" className="mt-3 h-32 rounded-xl object-cover w-full opacity-80" onError={(e)=>e.target.style.display='none'} />
+                    )}
                   </div>
 
                   <div>
@@ -741,9 +767,261 @@ const AdminDashboard = () => {
                     type="submit"
                     className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs transition-colors"
                   >
-                    Save Changes
+                    Save Banner Changes
                   </button>
                 </form>
+              </div>
+            )}
+
+            {/* TAB 7: CONTENT MANAGER */}
+            {activeTab === 'content' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-black">Content Manager</h2>
+                    <p className="text-xs text-slate-400 mt-1">Control announcement bar, offer cards, quick links & contact info shown on the website</p>
+                  </div>
+                  {cmSaveMsg && (
+                    <div className="flex items-center gap-2 bg-teal-500/10 border border-teal-500/25 text-teal-400 px-4 py-2 rounded-xl text-xs font-bold">
+                      <CheckCircle size={14} /> {cmSaveMsg}
+                    </div>
+                  )}
+                </div>
+
+                {/* SECTION 1: Announcement Bar */}
+                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Bell size={16} className="text-teal-400" />
+                    <h3 className="font-black text-white text-sm">Announcement Bar</h3>
+                    <span className="text-[10px] text-slate-400 font-semibold">(Shown above Navbar when enabled)</span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Enable Bar:</label>
+                    <button
+                      onClick={() => setAnnouncement(p => ({...p, enabled: !p.enabled}))}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                        announcement.enabled ? 'bg-teal-600 text-white' : 'bg-slate-800 border border-white/10 text-slate-400'
+                      }`}
+                    >
+                      {announcement.enabled ? <ToggleRight size={14}/> : <ToggleLeft size={14}/>}
+                      {announcement.enabled ? 'Enabled' : 'Disabled'}
+                    </button>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Bar Type / Color</label>
+                      <select value={announcement.type} onChange={e => setAnnouncement(p=>({...p,type:e.target.value}))}
+                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs"
+                      >
+                        <option value="info">Info (Teal)</option>
+                        <option value="promo">Promo (Purple Gradient)</option>
+                        <option value="warning">Warning (Amber)</option>
+                        <option value="success">Success (Green)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">CTA Button Text</label>
+                      <input type="text" value={announcement.linkText} onChange={e => setAnnouncement(p=>({...p,linkText:e.target.value}))}
+                        placeholder="e.g. Know More"
+                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-teal-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Announcement Text *</label>
+                    <input type="text" value={announcement.text} onChange={e => setAnnouncement(p=>({...p,text:e.target.value}))}
+                      placeholder="e.g. 🎉 Diwali Special: Get 20% off on Health Insurance!"
+                      className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-teal-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">CTA Link (optional)</label>
+                    <input type="text" value={announcement.link} onChange={e => setAnnouncement(p=>({...p,link:e.target.value}))}
+                      placeholder="e.g. /product/health or https://external.com"
+                      className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-teal-500"
+                    />
+                  </div>
+                  <button onClick={() => { db.setAnnouncement(announcement); setCmSaveMsg('Announcement saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition-colors"
+                  >
+                    <Save size={13}/> Save Announcement
+                  </button>
+                </div>
+
+                {/* SECTION 2: Offer Cards */}
+                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Tag size={16} className="text-amber-400" />
+                    <h3 className="font-black text-white text-sm">Offer / Promo Cards</h3>
+                    <span className="text-[10px] text-slate-400 font-semibold">(Shown on homepage below hero)</span>
+                  </div>
+
+                  {offers.map((offer, idx) => (
+                    <div key={offer.id || idx} className="border border-white/10 rounded-2xl p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-300">Offer #{idx+1}</span>
+                        <button onClick={() => {
+                          const updated = offers.map((o,i) => i===idx ? {...o,active:!o.active} : o);
+                          setOffers(updated);
+                        }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
+                          offer.active ? 'bg-teal-600/20 text-teal-400 border border-teal-500/30' : 'bg-slate-800 text-slate-500 border border-white/10'
+                        }`}>
+                          {offer.active ? <ToggleRight size={12}/> : <ToggleLeft size={12}/>}
+                          {offer.active ? 'Active' : 'Hidden'}
+                        </button>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Title</label>
+                          <input type="text" value={offer.title} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],title:e.target.value}; setOffers(u); }}
+                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Badge Text</label>
+                          <input type="text" value={offer.badge} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],badge:e.target.value}; setOffers(u); }}
+                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Link (path or URL)</label>
+                          <input type="text" value={offer.link} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],link:e.target.value}; setOffers(u); }}
+                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
+                        </div>
+                        <div>
+                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Button Text</label>
+                          <input type="text" value={offer.btnText} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],btnText:e.target.value}; setOffers(u); }}
+                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Description</label>
+                          <textarea rows={2} value={offer.description} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],description:e.target.value}; setOffers(u); }}
+                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500 resize-none" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button onClick={() => { db.setOffers(offers); setCmSaveMsg('Offers saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition-colors"
+                  >
+                    <Save size={13}/> Save All Offers
+                  </button>
+                </div>
+
+                {/* SECTION 3: Quick Links */}
+                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <LinkIcon size={16} className="text-blue-400" />
+                    <h3 className="font-black text-white text-sm">Quick Links Bar</h3>
+                    <span className="text-[10px] text-slate-400 font-semibold">(Shown below hero section)</span>
+                  </div>
+                  {quickLinks.map((ql, idx) => (
+                    <div key={ql.id||idx} className="flex items-center gap-3">
+                      <input type="text" value={ql.label} onChange={e=>{ const u=[...quickLinks]; u[idx]={...u[idx],label:e.target.value}; setQuickLinks(u); }}
+                        placeholder="Label" className="w-1/3 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-blue-500" />
+                      <input type="text" value={ql.link} onChange={e=>{ const u=[...quickLinks]; u[idx]={...u[idx],link:e.target.value}; setQuickLinks(u); }}
+                        placeholder="Link (e.g. /renew or tel:+91...)" className="flex-1 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-blue-500" />
+                      <button onClick={() => setQuickLinks(quickLinks.filter((_,i)=>i!==idx))} className="w-8 h-8 flex items-center justify-center bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors flex-shrink-0">
+                        <X size={13} />
+                      </button>
+                    </div>
+                  ))}
+                  <div className="flex gap-3">
+                    <button onClick={() => setQuickLinks([...quickLinks, { id:'ql'+Date.now(), label:'', link:'' }])}
+                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 border border-white/10 rounded-lg text-slate-400 hover:text-white text-xs font-bold transition-all"
+                    >
+                      <Plus size={13}/> Add Link
+                    </button>
+                    <button onClick={() => { db.setQuickLinks(quickLinks); setCmSaveMsg('Quick links saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
+                      className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs transition-colors"
+                    >
+                      <Save size={13}/> Save Links
+                    </button>
+                  </div>
+                </div>
+
+                {/* SECTION 4: Contact Info */}
+                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Phone size={16} className="text-green-400" />
+                    <h3 className="font-black text-white text-sm">Contact Information</h3>
+                    <span className="text-[10px] text-slate-400 font-semibold">(Used in footer & claim support page)</span>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {[['Phone Number','phone','+91 75749 48768'],['WhatsApp (digits only)','whatsapp','7574948768'],['Email','email','support@policyperfect.co.in'],['Address','address','Gujarat, India']].map(([lbl,key,ph]) => (
+                      <div key={key}>
+                        <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">{lbl}</label>
+                        <input type="text" value={contact[key]} onChange={e => setContact(p=>({...p,[key]:e.target.value}))}
+                          placeholder={ph}
+                          className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-green-500"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={() => { db.setContact(contact); setCmSaveMsg('Contact info saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-colors"
+                  >
+                    <Save size={13}/> Save Contact Info
+                  </button>
+                </div>
+
+                {/* SECTION 5: Site Logo */}
+                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Image size={16} className="text-purple-400" />
+                    <h3 className="font-black text-white text-sm">Site Logo Configuration</h3>
+                    <span className="text-[10px] text-slate-400 font-semibold">(Global site logo)</span>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Logo Image URL</label>
+                      <input type="text" value={siteLogo.url} onChange={e => setSiteLogo(p=>({...p,url:e.target.value}))}
+                        placeholder="e.g. /logo.png or https://example.com/logo.png"
+                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Logo Width (px)</label>
+                      <input type="number" value={siteLogo.width} onChange={e => setSiteLogo(p=>({...p,width:e.target.value}))}
+                        placeholder="180"
+                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-purple-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
+                     {/* Preview */}
+                     <img src={siteLogo.url} style={{ width: `${siteLogo.width}px`, maxWidth: '100%' }} alt="Logo Preview" />
+                  </div>
+                  <button onClick={() => { db.setLogo(siteLogo); setCmSaveMsg('Logo configuration saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition-colors"
+                  >
+                    <Save size={13}/> Save Logo
+                  </button>
+                </div>
+
+                {/* SECTION 6: About Us */}
+                <div className="bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
+                  <div className="flex items-center gap-2 mb-1">
+                    <FileText size={16} className="text-pink-400" />
+                    <h3 className="font-black text-white text-sm">About Us Details</h3>
+                    <span className="text-[10px] text-slate-400 font-semibold">(Shown in Footer modal)</span>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Company Description</label>
+                    <textarea value={aboutUs.text} onChange={e => setAboutUs({text: e.target.value})}
+                      rows={4}
+                      placeholder="PolicyPerfect is India's premier online insurance..."
+                      className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-pink-500 resize-none"
+                    />
+                  </div>
+                  <button onClick={() => { db.setAbout(aboutUs); setCmSaveMsg('About Us details saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl text-xs transition-colors"
+                  >
+                    <Save size={13}/> Save Details
+                  </button>
+                </div>
+
               </div>
             )}
 

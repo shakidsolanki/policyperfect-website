@@ -9,12 +9,15 @@ import AdminDashboard from './pages/AdminDashboard';
 import RenewPolicy from './pages/RenewPolicy';
 import ClaimSupport from './pages/ClaimSupport';
 import CustomerDashboard from './pages/CustomerDashboard';
+import CashlessNetwork from './pages/CashlessNetwork';
 import ChatWidget from './components/ChatWidget';
+import AnnouncementBar from './components/AnnouncementBar';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-slate-50">
+      <div className="min-h-screen flex flex-col bg-white">
+        <AnnouncementBar />
         <Navbar />
         <main className="flex-grow">
           <Routes>
@@ -27,6 +30,7 @@ function App() {
             <Route path="/claims" element={<ClaimSupport />} />
             <Route path="/login" element={<CustomerDashboard />} />
             <Route path="/dashboard" element={<CustomerDashboard />} />
+            <Route path="/cashless" element={<CashlessNetwork />} />
           </Routes>
         </main>
         <Footer />

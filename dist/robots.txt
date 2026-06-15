@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Crawl-delay: 10
+
+Sitemap: https://policyperfect.co.in/sitemap.xml

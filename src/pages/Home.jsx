@@ -269,7 +269,7 @@ const Home = () => {
                 >
                   <a href={banner.redirectUrl || '#'} className="block" onClick={(e) => !banner.redirectUrl && e.preventDefault()}>
                     <img
-                      src={banner.imageUrl || '/hero-illustration.png'}
+                      src="/hero-illustration.png?v=2"
                       alt="Insurance plans for family, car, health and life in India"
                       className="w-full object-cover"
                       style={{ height:'320px', objectPosition:'center top' }}

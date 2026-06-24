@@ -1,64 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, ShieldCheck, CheckCircle2, AlertCircle, Heart, Flame, Shield, TrendingUp, Building2, Briefcase } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle, Heart, Flame, Shield, TrendingUp, Building2, Briefcase, Sparkles, Phone, MessageSquare } from 'lucide-react';
 import { db } from '../utils/db';
 
-const PRODUCT_THEMES = {
-  health: { icon: Heart, color: '#dc2626', bg: '#fef2f2', label: 'Health Insurance' },
-  life: { icon: TrendingUp, color: '#059669', bg: '#ecfdf5', label: 'Term Life Insurance' },
-  fire: { icon: Flame, color: '#ea580c', bg: '#fff7ed', label: 'Property / Fire Insurance' },
-  travel: { icon: Shield, color: '#0284c7', bg: '#f0f9ff', label: 'Travel Insurance' },
-  cyber: { icon: ShieldCheck, color: '#7c3aed', bg: '#f5f3ff', label: 'Cyber Insurance' },
-  business: { icon: Building2, color: '#475569', bg: '#f8fafc', label: 'Business / SME Insurance' },
-  pet: { icon: Heart, color: '#ec4899', bg: '#fdf2f8', label: 'Pet Insurance' },
-  default: { icon: ShieldCheck, color: '#0d9488', bg: '#f0fdfa', label: 'Insurance Quote' },
-};
+const PRODUCT_LIST = [
+  { id: 'car', label: 'Car Insurance', category: 'motor' },
+  { id: 'bike', label: 'Bike Insurance', category: 'motor' },
+  { id: 'health', label: 'Health Insurance', category: 'health' },
+  { id: 'critical', label: 'Critical Illness', category: 'health' },
+  { id: 'senior', label: 'Senior Citizen Health', category: 'health' },
+  { id: 'parent', label: 'Parent Health', category: 'health' },
+  { id: 'travel', label: 'Travel Insurance', category: 'travel' },
+  { id: 'group', label: 'Group Health', category: 'business' },
+  { id: 'life', label: 'Term Life Insurance', category: 'life' },
+  { id: 'home', label: 'Home Insurance', category: 'property' },
+  { id: 'fire', label: 'Fire Insurance', category: 'property' },
+  { id: 'marine', label: 'Marine Insurance', category: 'business' },
+  { id: 'cyber', label: 'Cyber Insurance', category: 'business' },
+  { id: 'business', label: 'Business / SME Insurance', category: 'business' },
+  { id: 'workmen', label: 'Workmen Compensation', category: 'business' },
+  { id: 'pet', label: 'Pet Insurance', category: 'personal' }
+];
 
-const ProductQuoteModal = ({ isOpen, onClose, defaultProductType = 'health' }) => {
-  const [productType, setProductType] = useState(defaultProductType);
+const ProductQuoteModal = ({ isOpen, onClose, productType, defaultProductType = 'health' }) => {
+  const activeProductKey = productType || defaultProductType;
+  const [selectedProduct, setSelectedProduct] = useState(activeProductKey);
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Dynamic states
-  const [healthMembers, setHealthMembers] = useState({
-    self: true, spouse: false, son: false, daughter: false, father: false, mother: false
-  });
-  const [healthAges, setHealthAges] = useState({
-    self: '30', spouse: '28', son: '5', daughter: '8', father: '60', mother: '58'
-  });
-
+  // Step 1 - Common Fields
   const [formData, setFormData] = useState({
-    name: '', mobile: '', email: '', pincode: '', city: '', state: '',
-    // Life specific
-    gender: 'Male', tobacco: 'No', income: '5-10 Lakhs', coverAmount: '1 Crore', age: '28',
-    // Fire/Property specific
-    propertyType: 'Residential', propertyAge: '1-5 Years', constructionType: 'RCC Framed Structure', occupancy: 'Self Occupied', sumInsured: '50 Lakhs', fireSystems: 'Fire Extinguishers',
-    // Business specific
-    businessType: 'Retail Shop', employees: '1-10', turnover: 'Up to 1 Crore',
-    // Fallbacks
-    preExisting: 'None',
+    name: '',
+    mobile: '',
+    email: '',
+    city: '',
+    pincode: '',
+    preferredTime: 'Anytime',
+    remarks: '',
   });
 
+  // Step 2 - Product Specific Fields
+  const [productFields, setProductFields] = useState({});
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (isOpen) {
-      setProductType(defaultProductType);
+      setSelectedProduct(activeProductKey);
       setStep(1);
       setIsSubmitted(false);
       setIsSubmitting(false);
       setErrors({});
+      setProductFields({});
     }
-  }, [isOpen, defaultProductType]);
-
-  const handleMemberCheckbox = (member) => {
-    setHealthMembers(prev => ({ ...prev, [member]: !prev[member] }));
-  };
-
-  const handleAgeChange = (member, val) => {
-    setHealthAges(prev => ({ ...prev, [member]: val }));
-  };
+  }, [isOpen, activeProductKey]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,44 +61,68 @@ const ProductQuoteModal = ({ isOpen, onClose, defaultProductType = 'health' }) =
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
-  const validateStep = () => {
+  const handleProductFieldChange = (name, value) => {
+    setProductFields(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  };
+
+  const validateStep1 = () => {
     const newErrors = {};
-    if (step === 3) {
-      if (!formData.name.trim()) newErrors.name = 'Full name is required';
-      if (!formData.mobile || formData.mobile.length !== 10) newErrors.mobile = 'Valid 10-digit mobile number is required';
-      if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Valid email is required';
+    if (!formData.name.trim()) newErrors.name = 'Full name is required';
+    if (!formData.mobile || formData.mobile.length !== 10) newErrors.mobile = 'Valid 10-digit mobile number is required';
+    if (!formData.city.trim()) newErrors.city = 'City is required';
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Enter a valid email';
+    if (formData.pincode && formData.pincode.length !== 6) newErrors.pincode = 'Pincode must be 6 digits';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateStep2 = () => {
+    const newErrors = {};
+    // Add product-specific validation rules if needed
+    // Example: motor requires registration number
+    if (['car', 'bike'].includes(selectedProduct)) {
+      if (!productFields.regNo) newErrors.regNo = 'Registration number is required';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => { if (validateStep()) setStep(prev => prev + 1); };
-  const handleBack = () => { setStep(prev => prev - 1); };
+  const handleNext = () => {
+    if (validateStep1()) {
+      setStep(2);
+    }
+  };
+
+  const handleBack = () => {
+    setStep(1);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateStep()) return;
+    if (!validateStep2()) return;
     setIsSubmitting(true);
 
     setTimeout(() => {
-      let details = {};
-      if (productType === 'health') {
-        const selectedMembers = Object.keys(healthMembers).filter(k => healthMembers[k]);
-        details = { members: selectedMembers.join(', '), memberDetails: selectedMembers.map(m => `${m} (${healthAges[m]}y)`).join(', '), preExisting: formData.preExisting };
-      } else if (productType === 'life') {
-        details = { gender: formData.gender, age: formData.age, income: formData.income, tobacco: formData.tobacco, coverAmount: formData.coverAmount };
-      } else if (productType === 'fire') {
-        details = { propertyType: formData.propertyType, sumInsured: formData.sumInsured };
-      } else if (productType === 'business') {
-        details = { businessType: formData.businessType, turnover: formData.turnover };
-      }
+      const leadSource = 'Website Quote Form';
+      const assignedTo = `Telecaller_${Math.floor(Math.random() * 5) + 1}`; // Auto assignment to telecaller
 
       const newLead = {
         id: 'L-' + Date.now().toString().slice(-6),
-        productType: (PRODUCT_THEMES[productType]?.label || productType) + ' Inquiry',
+        productType: PRODUCT_LIST.find(p => p.id === selectedProduct)?.label || selectedProduct,
         date: new Date().toLocaleString(),
-        name: formData.name, mobile: formData.mobile, email: formData.email, pincode: formData.pincode,
-        ...details, status: 'New'
+        name: formData.name,
+        mobile: formData.mobile,
+        email: formData.email,
+        city: formData.city,
+        pincode: formData.pincode,
+        preferredTime: formData.preferredTime,
+        remarks: formData.remarks,
+        leadSource,
+        assignedTo,
+        details: productFields,
+        status: 'New'
       };
 
       const existingLeads = db.getLeads ? db.getLeads() : [];
@@ -111,331 +130,856 @@ const ProductQuoteModal = ({ isOpen, onClose, defaultProductType = 'health' }) =
 
       setIsSubmitting(false);
       setIsSubmitted(true);
-      setTimeout(() => onClose(), 3000);
     }, 1000);
   };
 
-  const theme = PRODUCT_THEMES[productType] || PRODUCT_THEMES['default'];
-  const Icon = theme.icon;
+  const openWhatsApp = () => {
+    const text = encodeURIComponent(`Hi PolicyPerfect Team, I just submitted a quote request for ${PRODUCT_LIST.find(p => p.id === selectedProduct)?.label || selectedProduct}. Please contact me.`);
+    window.open(`https://wa.me/917574948768?text=${text}`, '_blank');
+  };
 
-  if (!isOpen) return null;
+  const inputCls = "w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all font-semibold text-[13px]";
+  const labelCls = "block text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1.5 ml-1";
 
-  // Input styles
-  const inputCls = "w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all font-semibold text-[14px]";
-  const labelCls = "block text-[11px] font-black uppercase tracking-wider text-slate-500 mb-1.5 ml-1";
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 bg-slate-900/60 backdrop-blur-sm">
-      <AnimatePresence mode="wait">
-        {!isSubmitted ? (
-          <motion.div 
-            key="form"
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="w-full h-[90vh] sm:h-auto sm:max-h-[90vh] md:max-w-4xl bg-white sm:rounded-[2rem] rounded-t-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row relative"
-          >
-            {/* Close Button Mobile */}
-            <button onClick={onClose} className="md:hidden absolute top-4 right-4 z-10 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-slate-600 shadow-sm border border-slate-100">
-              <X size={16} />
-            </button>
-
-            {/* LEFT SIDE: Hero Info (Hidden on mobile) */}
-            <div className="hidden md:flex md:w-[35%] p-8 flex-col justify-between text-white relative overflow-hidden"
-              style={{ background: `linear-gradient(145deg, ${theme.color}, #0c1b33)` }}
-            >
-              <div className="absolute inset-0 opacity-10" style={{ background: 'radial-gradient(circle at 80% 20%, white 0%, transparent 60%)' }} />
-              <div className="relative z-10">
-                <div className="w-12 h-12 bg-white/20 backdrop-blur rounded-2xl flex items-center justify-center mb-6 border border-white/20 shadow-lg">
-                  <Icon size={24} className="text-white" />
-                </div>
-                <h2 className="text-3xl font-black mb-3 leading-tight">{theme.label}</h2>
-                <p className="text-white/80 text-sm font-medium leading-relaxed">
-                  Get personalized quotes from 25+ top insurers in India. Transparent pricing, zero hidden fees, and instant issuance.
-                </p>
-              </div>
-
-              <div className="relative z-10 space-y-4">
-                {[
-                  { title: 'Best Price Guarantee', desc: 'Save up to 40% on premiums' },
-                  { title: 'Instant Issuance', desc: 'Zero paperwork required' },
-                  { title: '24x7 Claim Support', desc: 'Dedicated claim assistance' }
-                ].map((f, i) => (
-                  <div key={i} className="flex gap-3">
-                    <CheckCircle2 size={18} className="text-teal-300 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-white">{f.title}</h4>
-                      <p className="text-[11px] text-white/70 font-medium">{f.desc}</p>
-                    </div>
-                  </div>
+  // Dynamic Product Fields Renderer
+  const renderProductSpecificFields = () => {
+    switch (selectedProduct) {
+      case 'car':
+      case 'bike':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Vehicle Type *</label>
+              <div className="flex gap-2">
+                {['Car', 'Bike', 'Commercial'].map(t => (
+                  <button key={t} type="button" onClick={() => handleProductFieldChange('vehicleType', t)}
+                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[12px] transition-all ${productFields.vehicleType === t ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                  >
+                    {t}
+                  </button>
                 ))}
               </div>
             </div>
+            <div>
+              <label className={labelCls}>Registration Number *</label>
+              <input type="text" placeholder="e.g. GJ01XX9999" value={productFields.regNo || ''} onChange={e => handleProductFieldChange('regNo', e.target.value.toUpperCase())}
+                className={`${inputCls} ${errors.regNo ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
+              />
+              {errors.regNo && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.regNo}</p>}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Vehicle Make</label>
+                <input type="text" placeholder="e.g. Maruti" value={productFields.make || ''} onChange={e => handleProductFieldChange('make', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Vehicle Model</label>
+                <input type="text" placeholder="e.g. Swift" value={productFields.model || ''} onChange={e => handleProductFieldChange('model', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Registration Year</label>
+                <select value={productFields.regYear || '2025'} onChange={e => handleProductFieldChange('regYear', e.target.value)} className={inputCls}>
+                  {[...Array(15)].map((_, i) => {
+                    const yr = (new Date().getFullYear() - i).toString();
+                    return <option key={yr} value={yr}>{yr}</option>;
+                  })}
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Fuel Type</label>
+                <select value={productFields.fuelType || 'Petrol'} onChange={e => handleProductFieldChange('fuelType', e.target.value)} className={inputCls}>
+                  <option>Petrol</option>
+                  <option>Diesel</option>
+                  <option>CNG</option>
+                  <option>Electric</option>
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Existing Insurer</label>
+                <input type="text" placeholder="e.g. HDFC Ergo" value={productFields.existingInsurer || ''} onChange={e => handleProductFieldChange('existingInsurer', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>NCB %</label>
+                <select value={productFields.ncb || '0%'} onChange={e => handleProductFieldChange('ncb', e.target.value)} className={inputCls}>
+                  <option>0%</option>
+                  <option>20%</option>
+                  <option>25%</option>
+                  <option>35%</option>
+                  <option>45%</option>
+                  <option>50%</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Claim in Previous Year?</label>
+              <div className="flex gap-2">
+                {['No', 'Yes'].map(c => (
+                  <button key={c} type="button" onClick={() => handleProductFieldChange('prevClaim', c)}
+                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[12px] transition-all ${productFields.prevClaim === c ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      case 'health':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Coverage Type</label>
+              <div className="flex gap-2">
+                {['Individual', 'Family Floater'].map(t => (
+                  <button key={t} type="button" onClick={() => handleProductFieldChange('coverageType', t)}
+                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[12px] transition-all ${productFields.coverageType === t ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Self Age</label>
+                <input type="number" placeholder="Age" value={productFields.selfAge || ''} onChange={e => handleProductFieldChange('selfAge', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Spouse Age</label>
+                <input type="number" placeholder="Age" value={productFields.spouseAge || ''} onChange={e => handleProductFieldChange('spouseAge', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Children Count</label>
+                <select value={productFields.children || '0'} onChange={e => handleProductFieldChange('children', e.target.value)} className={inputCls}>
+                  <option>0</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Sum Insured Required</label>
+                <select value={productFields.sumInsured || '5 Lakhs'} onChange={e => handleProductFieldChange('sumInsured', e.target.value)} className={inputCls}>
+                  <option>3 Lakhs</option>
+                  <option>5 Lakhs</option>
+                  <option>10 Lakhs</option>
+                  <option>20 Lakhs</option>
+                  <option>50 Lakhs</option>
+                  <option>1 Crore</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Existing Medical Conditions</label>
+              <input type="text" placeholder="e.g. BP, Diabetes, None" value={productFields.medicalConditions || ''} onChange={e => handleProductFieldChange('medicalConditions', e.target.value)} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Have Existing Health Insurance?</label>
+              <div className="flex gap-2">
+                {['No', 'Yes'].map(h => (
+                  <button key={h} type="button" onClick={() => handleProductFieldChange('hasExisting', h)}
+                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[12px] transition-all ${productFields.hasExisting === h ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                  >
+                    {h}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      case 'critical':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Age</label>
+                <input type="number" placeholder="Enter Age" value={productFields.age || ''} onChange={e => handleProductFieldChange('age', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Gender</label>
+                <select value={productFields.gender || 'Male'} onChange={e => handleProductFieldChange('gender', e.target.value)} className={inputCls}>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Occupation</label>
+              <input type="text" placeholder="e.g. Software Engineer" value={productFields.occupation || ''} onChange={e => handleProductFieldChange('occupation', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Smoker / Non-Smoker</label>
+                <select value={productFields.smoker || 'Non-Smoker'} onChange={e => handleProductFieldChange('smoker', e.target.value)} className={inputCls}>
+                  <option>Non-Smoker</option>
+                  <option>Smoker</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Coverage Amount</label>
+                <select value={productFields.coverageAmount || '10 Lakhs'} onChange={e => handleProductFieldChange('coverageAmount', e.target.value)} className={inputCls}>
+                  <option>5 Lakhs</option>
+                  <option>10 Lakhs</option>
+                  <option>25 Lakhs</option>
+                  <option>50 Lakhs</option>
+                  <option>1 Crore</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Existing Illness (if any)</label>
+              <input type="text" placeholder="e.g. Asthma, Heart Disease" value={productFields.existingIllness || ''} onChange={e => handleProductFieldChange('existingIllness', e.target.value)} className={inputCls} />
+            </div>
+          </div>
+        );
+      case 'senior':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Age</label>
+                <input type="number" placeholder="Enter Age" value={productFields.age || ''} onChange={e => handleProductFieldChange('age', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Gender</label>
+                <select value={productFields.gender || 'Male'} onChange={e => handleProductFieldChange('gender', e.target.value)} className={inputCls}>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Existing Diseases (if any)</label>
+              <input type="text" placeholder="e.g. Hypertension, Joint pain" value={productFields.diseases || ''} onChange={e => handleProductFieldChange('diseases', e.target.value)} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Current Medication Details</label>
+              <input type="text" placeholder="e.g. Telmisartan 40mg" value={productFields.medication || ''} onChange={e => handleProductFieldChange('medication', e.target.value)} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Sum Insured Required</label>
+              <select value={productFields.sumInsured || '5 Lakhs'} onChange={e => handleProductFieldChange('sumInsured', e.target.value)} className={inputCls}>
+                <option>3 Lakhs</option>
+                <option>5 Lakhs</option>
+                <option>10 Lakhs</option>
+                <option>15 Lakhs</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'parent':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Father Age</label>
+                <input type="number" placeholder="e.g. 62" value={productFields.fatherAge || ''} onChange={e => handleProductFieldChange('fatherAge', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Mother Age</label>
+                <input type="number" placeholder="e.g. 58" value={productFields.motherAge || ''} onChange={e => handleProductFieldChange('motherAge', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Existing Diseases (if any)</label>
+              <input type="text" placeholder="e.g. Diabetes, BP" value={productFields.diseases || ''} onChange={e => handleProductFieldChange('diseases', e.target.value)} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Sum Insured Required</label>
+              <select value={productFields.sumInsured || '5 Lakhs'} onChange={e => handleProductFieldChange('sumInsured', e.target.value)} className={inputCls}>
+                <option>3 Lakhs</option>
+                <option>5 Lakhs</option>
+                <option>10 Lakhs</option>
+                <option>15 Lakhs</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'travel':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Destination Country</label>
+              <input type="text" placeholder="e.g. USA, Germany, Thailand" value={productFields.destination || ''} onChange={e => handleProductFieldChange('destination', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Start Date</label>
+                <input type="date" value={productFields.startDate || ''} onChange={e => handleProductFieldChange('startDate', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>End Date</label>
+                <input type="date" value={productFields.endDate || ''} onChange={e => handleProductFieldChange('endDate', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Total Travellers</label>
+                <input type="number" placeholder="e.g. 2" value={productFields.travellerCount || ''} onChange={e => handleProductFieldChange('travellerCount', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Traveller Ages</label>
+                <input type="text" placeholder="e.g. 32, 28" value={productFields.travellerAges || ''} onChange={e => handleProductFieldChange('travellerAges', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Purpose of Travel</label>
+              <select value={productFields.purpose || 'Leisure'} onChange={e => handleProductFieldChange('purpose', e.target.value)} className={inputCls}>
+                <option>Leisure / Holiday</option>
+                <option>Business Trip</option>
+                <option>Student Study Abroad</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'group':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Company Name</label>
+              <input type="text" placeholder="Company Legal Name" value={productFields.companyName || ''} onChange={e => handleProductFieldChange('companyName', e.target.value)} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Industry Type</label>
+              <input type="text" placeholder="e.g. IT, Manufacturing, Retail" value={productFields.industry || ''} onChange={e => handleProductFieldChange('industry', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Total Employees</label>
+                <select value={productFields.employees || '10-20'} onChange={e => handleProductFieldChange('employees', e.target.value)} className={inputCls}>
+                  <option>10-20</option>
+                  <option>21-50</option>
+                  <option>51-200</option>
+                  <option>200+</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Coverage Required</label>
+                <input type="text" placeholder="e.g. ₹3 Lakhs Floater" value={productFields.coverage || ''} onChange={e => handleProductFieldChange('coverage', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Existing Group Policy?</label>
+              <select value={productFields.existingPolicy || 'No'} onChange={e => handleProductFieldChange('existingPolicy', e.target.value)} className={inputCls}>
+                <option>No</option>
+                <option>Yes</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'life':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Date of Birth</label>
+                <input type="date" value={productFields.dob || ''} onChange={e => handleProductFieldChange('dob', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Gender</label>
+                <select value={productFields.gender || 'Male'} onChange={e => handleProductFieldChange('gender', e.target.value)} className={inputCls}>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Occupation</label>
+                <input type="text" placeholder="e.g. Salaried" value={productFields.occupation || ''} onChange={e => handleProductFieldChange('occupation', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Annual Income</label>
+                <select value={productFields.income || '5-10 Lakhs'} onChange={e => handleProductFieldChange('income', e.target.value)} className={inputCls}>
+                  <option>Under 3 Lakhs</option>
+                  <option>3-5 Lakhs</option>
+                  <option>5-10 Lakhs</option>
+                  <option>10-15 Lakhs</option>
+                  <option>15-20 Lakhs</option>
+                  <option>20+ Lakhs</option>
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Tobacco / Smoker</label>
+                <select value={productFields.tobacco || 'No'} onChange={e => handleProductFieldChange('tobacco', e.target.value)} className={inputCls}>
+                  <option>No</option>
+                  <option>Yes</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Coverage Amount</label>
+                <select value={productFields.coverAmount || '1 Crore'} onChange={e => handleProductFieldChange('coverAmount', e.target.value)} className={inputCls}>
+                  <option>50 Lakhs</option>
+                  <option>1 Crore</option>
+                  <option>2 Crores</option>
+                  <option>3+ Crores</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Policy Term</label>
+              <select value={productFields.term || '30 Years'} onChange={e => handleProductFieldChange('term', e.target.value)} className={inputCls}>
+                <option>10 Years</option>
+                <option>20 Years</option>
+                <option>30 Years</option>
+                <option>40 Years</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'home':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Property Type</label>
+                <select value={productFields.propertyType || 'Apartment'} onChange={e => handleProductFieldChange('propertyType', e.target.value)} className={inputCls}>
+                  <option>Apartment / Flat</option>
+                  <option>Independent Villa</option>
+                  <option>Row House / Builder floor</option>
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}>Ownership</label>
+                <select value={productFields.ownership || 'Owned'} onChange={e => handleProductFieldChange('ownership', e.target.value)} className={inputCls}>
+                  <option>Owned</option>
+                  <option>Rented</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Estimated Property Value</label>
+              <select value={productFields.propertyValue || '50 Lakhs - 1 Crore'} onChange={e => handleProductFieldChange('propertyValue', e.target.value)} className={inputCls}>
+                <option>Up to 50 Lakhs</option>
+                <option>50 Lakhs - 1 Crore</option>
+                <option>1 - 2 Crores</option>
+                <option>2 - 5 Crores</option>
+                <option>5+ Crores</option>
+              </select>
+            </div>
+            <div>
+              <label className={labelCls}>Construction Type</label>
+              <select value={productFields.constructionType || 'RCC Framed'} onChange={e => handleProductFieldChange('constructionType', e.target.value)} className={inputCls}>
+                <option>RCC Framed Structure</option>
+                <option>Load Bearing Brick Walls</option>
+                <option>Timber / Wood Frame</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'fire':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Business / Shop Name</label>
+              <input type="text" placeholder="Enter Business Name" value={productFields.businessName || ''} onChange={e => handleProductFieldChange('businessName', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Property Value</label>
+                <input type="text" placeholder="e.g. ₹50 Lakhs" value={productFields.propertyValue || ''} onChange={e => handleProductFieldChange('propertyValue', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Stock Value</label>
+                <input type="text" placeholder="e.g. ₹20 Lakhs" value={productFields.stockValue || ''} onChange={e => handleProductFieldChange('stockValue', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Building Value</label>
+                <input type="text" placeholder="e.g. ₹30 Lakhs" value={productFields.buildingValue || ''} onChange={e => handleProductFieldChange('buildingValue', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Property Location</label>
+                <input type="text" placeholder="e.g. Industrial Area" value={productFields.location || ''} onChange={e => handleProductFieldChange('location', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+          </div>
+        );
+      case 'marine':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Cargo / Goods Type</label>
+                <input type="text" placeholder="e.g. Steel Sheets" value={productFields.cargoType || ''} onChange={e => handleProductFieldChange('cargoType', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Transit Type</label>
+                <select value={productFields.transitType || 'Road'} onChange={e => handleProductFieldChange('transitType', e.target.value)} className={inputCls}>
+                  <option>Road</option>
+                  <option>Rail</option>
+                  <option>Sea Freight</option>
+                  <option>Air Freight</option>
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Origin Location</label>
+                <input type="text" placeholder="e.g. Ahmedabad" value={productFields.origin || ''} onChange={e => handleProductFieldChange('origin', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Destination Location</label>
+                <input type="text" placeholder="e.g. Hamburg Port" value={productFields.destination || ''} onChange={e => handleProductFieldChange('destination', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Cargo Value</label>
+              <input type="text" placeholder="e.g. ₹45 Lakhs" value={productFields.cargoValue || ''} onChange={e => handleProductFieldChange('cargoValue', e.target.value)} className={inputCls} />
+            </div>
+          </div>
+        );
+      case 'cyber':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Cyber Risk Entity</label>
+              <div className="flex gap-2">
+                {['Individual', 'Business'].map(e => (
+                  <button key={e} type="button" onClick={() => handleProductFieldChange('entityType', e)}
+                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[12px] transition-all ${productFields.entityType === e ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                  >
+                    {e}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Business Type</label>
+              <input type="text" placeholder="e.g. E-commerce, Software development" value={productFields.businessType || ''} onChange={e => handleProductFieldChange('businessType', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Annual Turnover</label>
+                <input type="text" placeholder="e.g. ₹5 Crores" value={productFields.turnover || ''} onChange={e => handleProductFieldChange('turnover', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Number of Employees</label>
+                <input type="number" placeholder="Employees" value={productFields.employeesCount || ''} onChange={e => handleProductFieldChange('employeesCount', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Existing Cyber Incidents?</label>
+              <select value={productFields.hasIncidents || 'No'} onChange={e => handleProductFieldChange('hasIncidents', e.target.value)} className={inputCls}>
+                <option>No</option>
+                <option>Yes (Brief in remarks)</option>
+              </select>
+            </div>
+          </div>
+        );
+      case 'business':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Business Name</label>
+              <input type="text" placeholder="Company Name" value={productFields.businessName || ''} onChange={e => handleProductFieldChange('businessName', e.target.value)} className={inputCls} />
+            </div>
+            <div>
+              <label className={labelCls}>Industry Type</label>
+              <input type="text" placeholder="e.g. Retail, Logistics, Manufacturing" value={productFields.industry || ''} onChange={e => handleProductFieldChange('industry', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Annual Turnover</label>
+                <input type="text" placeholder="Turnover" value={productFields.turnover || ''} onChange={e => handleProductFieldChange('turnover', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Number of Employees</label>
+                <input type="number" placeholder="Employees" value={productFields.employees || ''} onChange={e => handleProductFieldChange('employees', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Required Coverage Type</label>
+              <input type="text" placeholder="e.g. Asset Protection, Liability" value={productFields.coverageRequired || ''} onChange={e => handleProductFieldChange('coverageRequired', e.target.value)} className={inputCls} />
+            </div>
+          </div>
+        );
+      case 'workmen':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Company Name</label>
+              <input type="text" placeholder="Company Name" value={productFields.companyName || ''} onChange={e => handleProductFieldChange('companyName', e.target.value)} className={inputCls} />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Number of Workers</label>
+                <input type="number" placeholder="Workers count" value={productFields.workersCount || ''} onChange={e => handleProductFieldChange('workersCount', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Industry Type</label>
+                <input type="text" placeholder="e.g. Construction" value={productFields.industry || ''} onChange={e => handleProductFieldChange('industry', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Annual Wage Amount</label>
+                <input type="text" placeholder="Wages Total" value={productFields.annualWages || ''} onChange={e => handleProductFieldChange('annualWages', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>State of Site</label>
+                <input type="text" placeholder="e.g. Gujarat" value={productFields.state || ''} onChange={e => handleProductFieldChange('state', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+          </div>
+        );
+      case 'pet':
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className={labelCls}>Pet Type</label>
+              <div className="flex gap-2">
+                {['Dog', 'Cat'].map(p => (
+                  <button key={p} type="button" onClick={() => handleProductFieldChange('petType', p)}
+                    className={`flex-1 py-2.5 rounded-xl border-2 font-bold text-[12px] transition-all ${productFields.petType === p ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Breed</label>
+                <input type="text" placeholder="e.g. Golden Retriever" value={productFields.breed || ''} onChange={e => handleProductFieldChange('breed', e.target.value)} className={inputCls} />
+              </div>
+              <div>
+                <label className={labelCls}>Age (Months/Years)</label>
+                <input type="text" placeholder="e.g. 2 Years" value={productFields.age || ''} onChange={e => handleProductFieldChange('age', e.target.value)} className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>Sum Insured Required</label>
+              <select value={productFields.sumInsured || '50,000'} onChange={e => handleProductFieldChange('sumInsured', e.target.value)} className={inputCls}>
+                <option>10,000</option>
+                <option>25,000</option>
+                <option>50,000</option>
+                <option>1 Lakh</option>
+              </select>
+            </div>
+          </div>
+        );
+      default:
+        return (
+          <div className="p-4 bg-teal-50 text-teal-800 rounded-2xl border border-teal-100 text-xs font-semibold">
+            Custom quote fields will be configured by our advisor over call. Click Submit to verify.
+          </div>
+        );
+    }
+  };
 
-            {/* RIGHT SIDE: Form Area (65%) */}
-            <div className="w-full md:w-[65%] flex flex-col h-full bg-white relative">
-              {/* Mobile Header */}
-              <div className="md:hidden px-6 pt-6 pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: theme.bg, color: theme.color }}>
-                    <Icon size={20} />
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex justify-end bg-slate-900/60 backdrop-blur-sm">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-transparent" onClick={onClose} />
+
+      {/* Drawer */}
+      <motion.div
+        initial={{ x: '100%' }}
+        animate={{ x: 0 }}
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+        className="relative w-full max-w-lg md:max-w-xl h-screen bg-white shadow-2xl flex flex-col z-10 overflow-hidden"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-[#0c1b33] text-white">
+          <div>
+            <h3 className="text-lg font-black tracking-tight">Get Best Insurance Quote</h3>
+            <p className="text-xs text-slate-300 font-medium">Compare plans & save up to 40% instantly</p>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-full h-1 bg-slate-100">
+          <div className="h-full bg-teal-500 transition-all duration-300" style={{ width: step === 1 ? '50%' : '100%' }} />
+        </div>
+
+        {/* Scrollable Form Body */}
+        <div className="flex-grow overflow-y-auto p-6 space-y-6 custom-scrollbar">
+          {!isSubmitted ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {step === 1 ? (
+                /* STEP 1: Common Fields */
+                <div className="space-y-4">
+                  <div className="p-4 bg-teal-50 border border-teal-100 rounded-2xl flex items-start gap-2.5 mb-2">
+                    <Sparkles size={16} className="text-teal-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-[12px] font-bold text-teal-800 leading-relaxed">
+                      Enter your contact details to begin. In Step 2, we will ask for details specific to your selection.
+                    </p>
                   </div>
+
                   <div>
-                    <h2 className="text-[16px] font-black text-slate-900">{theme.label}</h2>
-                    <p className="text-[11px] font-semibold text-slate-500">Get quotes in 2 minutes</p>
+                    <label className={labelCls}>Select Insurance Type *</label>
+                    <select value={selectedProduct} onChange={e => setSelectedProduct(e.target.value)} className={inputCls}>
+                      {PRODUCT_LIST.map(p => (
+                        <option key={p.id} value={p.id}>{p.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={labelCls}>Full Name *</label>
+                    <input type="text" name="name" placeholder="As per Aadhaar / PAN" value={formData.name} onChange={handleChange}
+                      className={`${inputCls} ${errors.name ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
+                    />
+                    {errors.name && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.name}</p>}
+                  </div>
+
+                  <div>
+                    <label className={labelCls}>Mobile Number *</label>
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-3 border-r border-slate-200">
+                        <span className="text-[13px] font-bold text-slate-500">+91</span>
+                      </div>
+                      <input type="tel" name="mobile" placeholder="10-digit mobile number" maxLength={10} value={formData.mobile} onChange={e => setFormData(p => ({ ...p, mobile: e.target.value.replace(/\D/g, '') }))}
+                        className={`${inputCls} pl-[65px] ${errors.mobile ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
+                      />
+                    </div>
+                    {errors.mobile && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.mobile}</p>}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>City *</label>
+                      <input type="text" name="city" placeholder="e.g. Ahmedabad" value={formData.city} onChange={handleChange}
+                        className={`${inputCls} ${errors.city ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
+                      />
+                      {errors.city && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.city}</p>}
+                    </div>
+                    <div>
+                      <label className={labelCls}>Pincode</label>
+                      <input type="text" name="pincode" placeholder="e.g. 380009" maxLength={6} value={formData.pincode} onChange={e => setFormData(p => ({ ...p, pincode: e.target.value.replace(/\D/g, '') }))}
+                        className={`${inputCls} ${errors.pincode ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
+                      />
+                      {errors.pincode && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.pincode}</p>}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelCls}>Email Address</label>
+                    <input type="email" name="email" placeholder="e.g. name@example.com" value={formData.email} onChange={handleChange}
+                      className={`${inputCls} ${errors.email ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
+                    />
+                    {errors.email && <p className="text-[10px] text-red-500 font-bold mt-1 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.email}</p>}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>Preferred Contact Time</label>
+                      <select name="preferredTime" value={formData.preferredTime} onChange={handleChange} className={inputCls}>
+                        <option>Anytime</option>
+                        <option>Morning (9 AM - 12 PM)</option>
+                        <option>Afternoon (12 PM - 4 PM)</option>
+                        <option>Evening (4 PM - 8 PM)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Additional Remarks</label>
+                      <input type="text" name="remarks" placeholder="Optional details..." value={formData.remarks} onChange={handleChange} className={inputCls} />
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Header / Progress Desktop */}
-              <div className="hidden md:flex px-8 pt-8 pb-4 justify-between items-center">
-                <div>
-                  <p className="text-[11px] font-black uppercase tracking-widest text-teal-600 mb-1">Get Your Quote</p>
-                  <h3 className="text-xl font-black text-slate-900">Step {step} of 3</h3>
+              ) : (
+                /* STEP 2: Product Specific Fields */
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <span className="text-[13px] font-black text-slate-800 uppercase tracking-wider">
+                      {PRODUCT_LIST.find(p => p.id === selectedProduct)?.label} details
+                    </span>
+                    <button type="button" onClick={handleBack} className="text-[11px] font-bold text-teal-600 hover:text-teal-700">
+                      Edit Contact Details
+                    </button>
+                  </div>
+                  
+                  {renderProductSpecificFields()}
                 </div>
-                <button onClick={onClose} className="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors border border-slate-200">
-                  <X size={16} />
+              )}
+            </form>
+          ) : (
+            /* SUCCESS PAGE SCREEN */
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="py-8 text-center space-y-6"
+            >
+              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-green-200">
+                <CheckCircle2 size={44} className="text-green-500 animate-pulse" />
+              </div>
+              <div className="space-y-2">
+                <h4 className="text-2xl font-black text-slate-900">Request Registered!</h4>
+                <p className="text-sm font-semibold text-slate-500 max-w-sm mx-auto leading-relaxed">
+                  Our Dedicated Insurance Advisor Will Contact You Shortly. A telecaller has been assigned to prepare your quotes.
+                </p>
+              </div>
+
+              <div className="p-5 bg-slate-50 border border-slate-100 rounded-3xl space-y-3 max-w-sm mx-auto">
+                <div className="text-[12px] font-bold text-slate-600 flex justify-between">
+                  <span>Lead Reference:</span>
+                  <span className="text-slate-900 font-extrabold">L-{Date.now().toString().slice(-6)}</span>
+                </div>
+                <div className="text-[12px] font-bold text-slate-600 flex justify-between">
+                  <span>Assigned To:</span>
+                  <span className="text-slate-900 font-extrabold">Advisor Team</span>
+                </div>
+                <div className="text-[12px] font-bold text-slate-600 flex justify-between">
+                  <span>Status:</span>
+                  <span className="text-teal-600 font-extrabold flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-teal-500 inline-block animate-ping"></span> Active Allocation</span>
+                </div>
+              </div>
+
+              {/* WhatsApp Button CTA */}
+              <div className="space-y-3 pt-4">
+                <button
+                  onClick={openWhatsApp}
+                  className="w-full max-w-xs mx-auto py-3.5 px-6 bg-[#25d366] hover:bg-[#20ba5a] text-white rounded-xl font-black text-sm shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-105"
+                >
+                  <MessageSquare size={18} /> Connect on WhatsApp
                 </button>
+                <p className="text-[10px] text-slate-400 font-semibold">Get premium tables and comparisons instantly on your phone</p>
               </div>
-
-              {/* Progress Bar Line */}
-              <div className="w-full h-1.5 bg-slate-100">
-                <div className="h-full bg-teal-500 transition-all duration-500 ease-out" style={{ width: `${(step / 3) * 100}%` }} />
-              </div>
-
-              {/* Form Content */}
-              <div className="flex-grow overflow-y-auto px-6 py-6 md:px-8 space-y-6 custom-scrollbar">
-                
-                {/* === STEP 1: Core details === */}
-                {step === 1 && (
-                  <motion.div initial={{ opacity:0, x:20 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-20 }} className="space-y-6">
-                    
-                    {productType === 'health' && (
-                      <div>
-                        <label className="block text-[14px] font-black text-slate-800 mb-3">Who do you want to cover?</label>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                          {Object.keys(healthMembers).map((member) => (
-                            <div key={member} onClick={() => handleMemberCheckbox(member)}
-                              className={`relative p-3.5 rounded-2xl border-2 cursor-pointer transition-all ${
-                                healthMembers[member] ? 'border-teal-500 bg-teal-50 shadow-md shadow-teal-500/10' : 'border-slate-100 bg-white hover:border-teal-200'
-                              }`}
-                            >
-                              <div className="flex justify-between items-center mb-1">
-                                <span className={`font-black capitalize text-[13px] ${healthMembers[member] ? 'text-teal-800' : 'text-slate-600'}`}>{member}</span>
-                                {healthMembers[member] && <CheckCircle2 size={14} className="text-teal-600" />}
-                              </div>
-                              {healthMembers[member] && (
-                                <div className="mt-2.5" onClick={e => e.stopPropagation()}>
-                                  <select value={healthAges[member]} onChange={e => handleAgeChange(member, e.target.value)}
-                                    className="w-full px-2 py-1.5 bg-white border border-teal-200 rounded-lg text-[12px] font-bold text-slate-700 outline-none focus:border-teal-500"
-                                  >
-                                    {[...Array(100)].map((_, i) => <option key={i} value={i+1}>{i+1} yrs</option>)}
-                                  </select>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {productType === 'life' && (
-                      <div className="grid sm:grid-cols-2 gap-5">
-                        <div>
-                          <label className={labelCls}>Your Gender</label>
-                          <div className="flex gap-2">
-                            {['Male', 'Female'].map(g => (
-                              <button key={g} type="button" onClick={() => setFormData({...formData, gender: g})}
-                                className={`flex-1 py-3 rounded-xl border-2 font-bold text-[13px] transition-all ${formData.gender === g ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
-                              >
-                                {g}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <label className={labelCls}>Your Age</label>
-                          <select value={formData.age} onChange={handleChange} name="age" className={inputCls}>
-                            {[...Array(50)].map((_, i) => <option key={i} value={i+18}>{i+18} Years</option>)}
-                          </select>
-                        </div>
-                        <div>
-                          <label className={labelCls}>Annual Income</label>
-                          <select value={formData.income} onChange={handleChange} name="income" className={inputCls}>
-                            {['Under 5 Lakhs', '5-10 Lakhs', '10-15 Lakhs', '15-20 Lakhs', '20+ Lakhs'].map(v => <option key={v}>{v}</option>)}
-                          </select>
-                        </div>
-                        <div>
-                          <label className={labelCls}>Do you consume tobacco?</label>
-                          <div className="flex gap-2">
-                            {['Yes', 'No'].map(g => (
-                              <button key={g} type="button" onClick={() => setFormData({...formData, tobacco: g})}
-                                className={`flex-1 py-3 rounded-xl border-2 font-bold text-[13px] transition-all ${formData.tobacco === g ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-200'}`}
-                              >
-                                {g}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {productType === 'fire' && (
-                      <div className="grid sm:grid-cols-2 gap-5">
-                        <div><label className={labelCls}>Property Type</label><select name="propertyType" value={formData.propertyType} onChange={handleChange} className={inputCls}><option>Residential</option><option>Commercial/Office</option><option>Warehouse</option><option>Factory</option></select></div>
-                        <div><label className={labelCls}>Estimated Value</label><select name="sumInsured" value={formData.sumInsured} onChange={handleChange} className={inputCls}><option>Up to 50 Lakhs</option><option>50 Lakhs - 1 Crore</option><option>1-5 Crores</option><option>Above 5 Crores</option></select></div>
-                        <div><label className={labelCls}>Property Age</label><select name="propertyAge" value={formData.propertyAge} onChange={handleChange} className={inputCls}><option>0-5 Years</option><option>5-10 Years</option><option>10-20 Years</option><option>20+ Years</option></select></div>
-                      </div>
-                    )}
-
-                    {productType === 'business' && (
-                      <div className="grid sm:grid-cols-2 gap-5">
-                        <div><label className={labelCls}>Business Type</label><input type="text" name="businessType" value={formData.businessType} onChange={handleChange} placeholder="e.g. Retail Shop, IT Service" className={inputCls} /></div>
-                        <div><label className={labelCls}>Annual Turnover</label><select name="turnover" value={formData.turnover} onChange={handleChange} className={inputCls}><option>Up to 1 Crore</option><option>1 - 5 Crores</option><option>5 - 20 Crores</option><option>20+ Crores</option></select></div>
-                        <div><label className={labelCls}>Total Employees</label><select name="employees" value={formData.employees} onChange={handleChange} className={inputCls}><option>1-10</option><option>11-50</option><option>51-200</option><option>200+</option></select></div>
-                      </div>
-                    )}
-
-                    {(productType === 'travel' || productType === 'cyber' || productType === 'pet') && (
-                      <div className="p-5 bg-teal-50 rounded-2xl border border-teal-100 flex items-start gap-3">
-                        <Sparkles className="text-teal-500 mt-1 flex-shrink-0" size={20} />
-                        <div>
-                          <h4 className="font-bold text-teal-900 mb-1">Excellent Choice!</h4>
-                          <p className="text-[13px] text-teal-700 font-medium">Please proceed to enter your contact details. Our expert will customize the best {theme.label.toLowerCase()} plan for your specific needs.</p>
-                        </div>
-                      </div>
-                    )}
-
-                  </motion.div>
-                )}
-
-                {/* === STEP 2: Secondary details / Location === */}
-                {step === 2 && (
-                  <motion.div initial={{ opacity:0, x:20 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-20 }} className="space-y-5">
-                    <div>
-                      <label className={labelCls}>Pincode *</label>
-                      <input type="text" name="pincode" placeholder="Enter 6-digit Pincode" maxLength={6} value={formData.pincode} onChange={handleChange} className={inputCls} />
-                    </div>
-                    
-                    {productType === 'health' && (
-                      <div>
-                        <label className={labelCls}>Pre-existing Medical Conditions</label>
-                        <select name="preExisting" value={formData.preExisting} onChange={handleChange} className={inputCls}>
-                          <option>None</option>
-                          <option>Diabetes</option>
-                          <option>Blood Pressure / Hypertension</option>
-                          <option>Asthma</option>
-                          <option>Other</option>
-                        </select>
-                      </div>
-                    )}
-
-                    {productType === 'life' && (
-                      <div>
-                        <label className={labelCls}>Desired Life Cover Amount</label>
-                        <select name="coverAmount" value={formData.coverAmount} onChange={handleChange} className={inputCls}>
-                          <option>50 Lakhs</option>
-                          <option>1 Crore</option>
-                          <option>2 Crores</option>
-                          <option>3+ Crores</option>
-                        </select>
-                      </div>
-                    )}
-
-                    {productType === 'fire' && (
-                      <div>
-                        <label className={labelCls}>Fire Safety Systems Installed</label>
-                        <select name="fireSystems" value={formData.fireSystems} onChange={handleChange} className={inputCls}>
-                          <option>None</option>
-                          <option>Basic Fire Extinguishers</option>
-                          <option>Extinguishers & Hydrants</option>
-                          <option>Full Sprinkler System + Alarms</option>
-                        </select>
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-
-                {/* === STEP 3: Contact Details === */}
-                {step === 3 && (
-                  <motion.div initial={{ opacity:0, x:20 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-20 }} className="space-y-5">
-                    
-                    <div>
-                      <label className={labelCls}>Full Name *</label>
-                      <input type="text" name="name" placeholder="As per Aadhaar/PAN" value={formData.name} onChange={handleChange}
-                        className={`${inputCls} ${errors.name ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
-                      />
-                      {errors.name && <p className="text-[11px] text-red-500 font-bold mt-1.5 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.name}</p>}
-                    </div>
-
-                    <div>
-                      <label className={labelCls}>Mobile Number *</label>
-                      <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-3 border-r border-slate-200">
-                          <span className="text-[13px] font-bold text-slate-500">+91</span>
-                        </div>
-                        <input type="tel" name="mobile" placeholder="10-digit number" maxLength={10} value={formData.mobile} onChange={(e) => { setFormData(p=>({...p, mobile: e.target.value.replace(/\D/g,'')})); setErrors(p=>({...p, mobile:''})); }}
-                          className={`${inputCls} pl-[65px] ${errors.mobile ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
-                        />
-                      </div>
-                      {errors.mobile && <p className="text-[11px] text-red-500 font-bold mt-1.5 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.mobile}</p>}
-                    </div>
-
-                    <div>
-                      <label className={labelCls}>Email Address *</label>
-                      <input type="email" name="email" placeholder="Policy details will be sent here" value={formData.email} onChange={handleChange}
-                        className={`${inputCls} ${errors.email ? 'border-red-400 focus:ring-red-500/20 bg-red-50' : ''}`}
-                      />
-                      {errors.email && <p className="text-[11px] text-red-500 font-bold mt-1.5 ml-1 flex items-center gap-1"><AlertCircle size={10}/>{errors.email}</p>}
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Footer Actions */}
-              <div className="px-6 py-5 md:px-8 bg-slate-50 border-t border-slate-100 flex items-center justify-between mt-auto">
-                {step > 1 ? (
-                  <button onClick={handleBack} className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] text-slate-600 hover:bg-slate-200 transition-colors">
-                    <ArrowLeft size={16} /> Back
-                  </button>
-                ) : (
-                  <div />
-                )}
-                
-                {step < 3 ? (
-                  <button onClick={handleNext} className="flex items-center gap-2 px-6 py-3 bg-[#0c1b33] hover:bg-[#162a4a] text-white rounded-xl font-bold text-[13px] shadow-lg shadow-slate-900/10 transition-all">
-                    Next Step <ArrowRight size={16} />
-                  </button>
-                ) : (
-                  <button onClick={handleSubmit} disabled={isSubmitting} className="flex items-center gap-2 px-8 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold text-[14px] shadow-lg shadow-teal-600/20 transition-all disabled:opacity-70">
-                    {isSubmitting ? 'Processing...' : 'View Quotes Now'} <ArrowRight size={16} />
-                  </button>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div 
-            key="success"
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-sm bg-white rounded-[2rem] p-8 text-center shadow-2xl relative overflow-hidden"
-          >
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-blue-500" />
-            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.1 }} className="w-20 h-20 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-5">
-              <CheckCircle2 size={40} className="text-teal-500" />
             </motion.div>
-            <h3 className="text-2xl font-black text-slate-900 mb-2">Details Submitted!</h3>
-            <p className="text-[13px] font-medium text-slate-500 mb-6 leading-relaxed">
-              Our insurance expert will contact you shortly at <strong className="text-slate-800">{formData.mobile}</strong> with the best quotes for {theme.label}.
-            </p>
-            <div className="px-4 py-3 bg-slate-50 rounded-xl text-[12px] font-bold text-slate-600 border border-slate-100 flex items-center justify-center gap-2">
-              Redirecting...
-              <div className="w-4 h-4 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
-            </div>
-          </motion.div>
+          )}
+        </div>
+
+        {/* Footer */}
+        {!isSubmitted && (
+          <div className="px-6 py-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between flex-shrink-0">
+            {step === 2 ? (
+              <button type="button" onClick={handleBack} className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 font-black text-[12px] text-slate-600 hover:bg-slate-100 transition-colors">
+                <ArrowLeft size={14} /> Back
+              </button>
+            ) : (
+              <div />
+            )}
+
+            {step === 1 ? (
+              <button type="button" onClick={handleNext} className="flex items-center gap-1.5 px-6 py-2.5 bg-[#0c1b33] hover:bg-[#162a4a] text-white rounded-xl font-black text-[12px] shadow-md transition-all">
+                Next Step <ArrowRight size={14} />
+              </button>
+            ) : (
+              <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="flex items-center gap-1.5 px-6 py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-black text-[12px] shadow-md transition-all disabled:opacity-60">
+                {isSubmitting ? 'Submitting...' : 'Get Best Quote'} <ArrowRight size={14} />
+              </button>
+            )}
+          </div>
         )}
-      </AnimatePresence>
+      </motion.div>
     </div>
   );
 };

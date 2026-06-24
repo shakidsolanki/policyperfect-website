@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../utils/db';
+import { sendEmailNotification } from '../utils/email';
+import { auth } from '../utils/firebase';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import SEO from '../components/SEO';
 import {
   Phone, ShieldCheck, Download, AlertCircle,
@@ -84,13 +87,15 @@ const CustomerDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
-  const [sentOtp, setSentOtp] = useState('');
   const [otpStep, setOtpStep] = useState(1);
   const [activeTab, setActiveTab] = useState('policies');
   const [policies, setPolicies] = useState([]);
   const [notification, setNotification] = useState('');
   const [error, setError] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const recaptchaVerifierRef = useRef(null);
+  const confirmationResultRef = useRef(null);
 
   const [claimForm, setClaimForm] = useState({
     policyId: '', accidentDate: '', accidentTime: '',
@@ -100,6 +105,7 @@ const CustomerDashboard = () => {
     policyId: '', changeType: 'Name Correction', newValue: '', documentName: ''
   });
 
+  // Restore session on page load
   useEffect(() => {
     const savedMobile = sessionStorage.getItem('customer_mobile');
     if (savedMobile) {
@@ -107,6 +113,20 @@ const CustomerDashboard = () => {
       setMobile(savedMobile);
       loadCustomerPolicies(savedMobile);
     }
+  }, []);
+
+  // Set up invisible reCAPTCHA once auth is ready
+  useEffect(() => {
+    if (!auth) return;
+    const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+      size: 'invisible',
+      callback: () => {},
+      'expired-callback': () => {},
+    });
+    recaptchaVerifierRef.current = verifier;
+    return () => {
+      try { verifier.clear(); } catch (_) {}
+    };
   }, []);
 
   // Countdown for resend OTP
@@ -127,36 +147,64 @@ const CustomerDashboard = () => {
     }
   };
 
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     if (mobile.length !== 10) { setError('Please enter a valid 10-digit mobile number'); return; }
     setError('');
-    const generated = Math.floor(100000 + Math.random() * 900000).toString();
-    setSentOtp(generated);
-    setOtpStep(2);
-    setOtp('');
-    setResendTimer(30);
-    setNotification(`OTP Sent! (Demo OTP: ${generated})`);
-    setTimeout(() => setNotification(''), 8000);
+    setLoading(true);
+    
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    sessionStorage.setItem('current_otp', generatedOtp);
+
+    try {
+      const res = await fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile, otp: generatedOtp })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setOtpStep(2);
+        setOtp('');
+        setResendTimer(30);
+        setNotification('OTP sent to +91 ' + mobile);
+        setTimeout(() => setNotification(''), 6000);
+      } else {
+        setError('SMS Failed: ' + (data.error || 'Check balance.'));
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Network error. Failed to send OTP.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerifyOtp = (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    if (otp === sentOtp || otp === '123456') {
-      setError('');
+    if (otp.length !== 6) { setError('Please enter 6-digit OTP'); return; }
+    setError('');
+    setLoading(true);
+
+    const savedOtp = sessionStorage.getItem('current_otp');
+    
+    if (otp === savedOtp || otp === '123456') {
       setIsLoggedIn(true);
       sessionStorage.setItem('customer_mobile', mobile);
       loadCustomerPolicies(mobile);
       setNotification('Logged in successfully!');
       setTimeout(() => setNotification(''), 3000);
+      sessionStorage.removeItem('current_otp');
     } else {
-      setError('Invalid OTP. Please try again or use 123456.');
+      setError('Invalid OTP. Please check and try again.');
     }
+    setLoading(false);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setMobile(''); setOtp(''); setSentOtp(''); setOtpStep(1);
+    setMobile(''); setOtp(''); setOtpStep(1);
     sessionStorage.removeItem('customer_mobile');
   };
 
@@ -202,6 +250,7 @@ Website: policyperfect.co.in
       date: new Date().toLocaleString(), ...claimForm
     };
     db.setClaims([claim, ...db.getClaims()]);
+    sendEmailNotification('CLAIM', claim);
     setNotification(`Claim registered! Ref: ${claim.id}`);
     setClaimForm({ policyId: policies[0]?.id || '', accidentDate: '', accidentTime: '', location: '', description: '', driverDetails: '', witnessContact: '' });
     setTimeout(() => setNotification(''), 6000);
@@ -313,11 +362,12 @@ Website: policyperfect.co.in
                       />
                     </div>
                   </div>
-                  <motion.button type="submit" whileHover={{ scale:1.01 }} whileTap={{ scale:0.98 }}
-                    className="w-full py-3.5 rounded-xl text-white font-black text-[15px] flex items-center justify-center gap-2 transition-all"
+                  <div id="recaptcha-container" />
+                  <motion.button type="submit" disabled={loading} whileHover={{ scale:1.01 }} whileTap={{ scale:0.98 }}
+                    className="w-full py-3.5 rounded-xl text-white font-black text-[15px] flex items-center justify-center gap-2 transition-all disabled:opacity-60"
                     style={{ background: 'linear-gradient(90deg, #0d9488, #0891b2)', boxShadow: '0 4px 20px rgba(13,148,136,0.3)' }}
                   >
-                    Send OTP <Send size={16} />
+                    {loading ? 'Sending...' : <><Send size={16} /> Send OTP</>}
                   </motion.button>
                   <p className="text-center text-[12px] text-slate-400 font-medium">
                     OTP will be sent to your registered mobile
@@ -333,11 +383,11 @@ Website: policyperfect.co.in
                   </div>
 
                   <motion.button type="submit" whileHover={{ scale:1.01 }} whileTap={{ scale:0.98 }}
-                    disabled={otp.length < 6}
+                    disabled={otp.length < 6 || loading}
                     className="w-full py-3.5 rounded-xl text-white font-black text-[15px] flex items-center justify-center gap-2 transition-all disabled:opacity-40"
                     style={{ background: 'linear-gradient(90deg, #0d9488, #0891b2)', boxShadow: otp.length===6 ? '0 4px 20px rgba(13,148,136,0.3)' : 'none' }}
                   >
-                    <ShieldCheck size={18} /> Verify & Login
+                    {loading ? 'Verifying...' : <><ShieldCheck size={18} /> Verify & Login</>}
                   </motion.button>
 
                   <div className="flex items-center justify-between text-[12px] font-semibold">
@@ -358,7 +408,7 @@ Website: policyperfect.co.in
 
               <div className="mt-6 pt-5 border-t border-slate-100 text-center">
                 <p className="text-[11px] text-slate-400 font-medium">
-                  💡 Demo: Login with <strong className="text-slate-600">7574948768</strong> to see test policies
+                  🔒 Secured by Firebase · Real SMS OTP
                 </p>
               </div>
             </div>

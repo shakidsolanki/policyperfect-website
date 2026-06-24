@@ -4,10 +4,13 @@ import { motion } from 'framer-motion';
 import { 
   Shield, CheckCircle2, AlertTriangle, ArrowRight, 
   ChevronRight, HelpCircle, PhoneCall, Star, Clock, 
-  Percent, FileText, Settings, Heart, Navigation, Key
+  Percent, FileText, Settings, Heart, Navigation, Key, Zap, Car, Bike,
+  ShieldCheck, Headphones, Lock
 } from 'lucide-react';
+import HeroBackground from '../components/HeroBackground';
 import MotorLeadModal from '../components/MotorLeadModal';
 import { PartnerLogos, FAQ } from '../components/HomeSections';
+import TrustSection from '../components/TrustSection';
 import SEO from '../components/SEO';
 
 const MotorInsurance = () => {
@@ -110,74 +113,92 @@ const MotorInsurance = () => {
       </script>
       
       {/* Hero Section */}
-      <section className="bg-white border-b border-slate-200 pt-10 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
+      <section className="bg-white border-b border-slate-200 pt-10 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <HeroBackground isDark={false} icons={[Car, Bike, Shield, Clock, Settings, Zap]} />
+        <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
           {/* Left Text */}
           <div className="lg:w-[50%] w-full space-y-6">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Home</span>
-              <ChevronRight size={14} className="text-slate-400" />
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">{pageTitle}</span>
+            
+            {/* Top Badge */}
+            <div className="flex flex-wrap items-center gap-3 bg-white border border-slate-100/60 rounded-full py-1.5 px-4 shadow-sm max-w-fit">
+              <div className="flex items-center gap-2">
+                {/* Overlapping Avatars */}
+                <div className="flex -space-x-2">
+                  <img className="w-5.5 h-5.5 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100&h=100" alt="Customer 1" />
+                  <img className="w-5.5 h-5.5 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100" alt="Customer 2" />
+                  <img className="w-5.5 h-5.5 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100&h=100" alt="Customer 3" />
+                </div>
+                <span className="text-[10px] sm:text-[11px] font-black text-slate-700">Trusted by 50,000+ Customers</span>
+              </div>
+              <div className="h-4 w-px bg-slate-200"></div>
+              <div className="flex items-center gap-1">
+                <Star size={12} className="text-amber-500 fill-amber-500" />
+                <span className="text-[10px] sm:text-[11px] font-black text-slate-700">4.8/5</span>
+              </div>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 leading-tight">
-              {pageSub}
+            <h1 className="text-4xl md:text-5xl lg:text-6.5xl font-black text-slate-900 leading-[1.1] tracking-tight">
+              {pageTitle}
             </h1>
-            <p className="text-lg text-slate-500 leading-relaxed max-w-xl">
-              Compare plans from 25+ insurers and save up to 80% on your premium. Protect your vehicle against accidents, theft, and natural disasters.
+            <p className="text-[16px] sm:text-lg text-slate-500 font-semibold leading-relaxed max-w-xl">
+              {isBike 
+                ? "Complete protection for your two wheeler, your loved ones and your journey." 
+                : "Complete protection for your vehicle, your loved ones and your journey."}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20"
-              >
-                Get Instant Quote <ArrowRight size={18} />
-              </button>
-              <a 
-                href="#compare-plans"
-                className="flex items-center justify-center gap-2 px-8 py-4 border-2 border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50 transition-all"
-              >
-                Compare Plans
-              </a>
+            {/* Checklist */}
+            <div className="space-y-4 pt-1">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  <ShieldCheck size={16} />
+                </div>
+                <span className="text-sm font-black text-slate-700">Cashless repairs at 8000+ garages</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  <Clock size={16} />
+                </div>
+                <span className="text-sm font-black text-slate-700">Quick claim settlement</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  <Headphones size={16} />
+                </div>
+                <span className="text-sm font-black text-slate-700">24x7 claim support</span>
+              </div>
             </div>
 
-            {/* Quick Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-slate-100">
-              {[
-                { label: 'Instant Policy', sub: 'Issuance', icon: Clock },
-                { label: 'Cashless Claims', sub: 'Network', icon: Shield },
-                { label: 'Easy Renewals', sub: 'Instant Online', icon: Settings },
-                { label: 'No-Claim Bonus', sub: 'Benefits', icon: Percent }
-              ].map((badge, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center flex-shrink-0">
-                    <badge.icon size={16} />
-                  </div>
-                  <div className="text-[10px] leading-tight">
-                    <div className="font-extrabold text-slate-700">{badge.label}</div>
-                    <div className="text-slate-400 font-bold">{badge.sub}</div>
-                  </div>
-                </div>
-              ))}
+            {/* CTA Button */}
+            <div className="pt-2">
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-[#0c1b33] text-white rounded-xl font-black hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 cursor-pointer text-sm"
+              >
+                <FileText size={18} /> Get Free Quote
+              </button>
+            </div>
+
+            {/* Security Badges */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] text-slate-400 font-bold pt-2">
+              <div className="flex items-center gap-1.5">
+                <ShieldCheck size={13} className="text-slate-400" />
+                <span>100% Safe & Secure</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Lock size={13} className="text-slate-400" />
+                <span>Your Information is Protected</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Image */}
-          <div className="lg:w-[45%] w-full relative">
-            <div className="w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
-              <img src={mainImage} alt={pageTitle} className="w-full h-full object-cover" />
-            </div>
-            
-            {/* Float badge */}
-            <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-4 shadow-xl border border-slate-100 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-green-50 text-green-500 flex items-center justify-center">
-                <CheckCircle2 size={24} />
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 font-bold">Trusted by</div>
-                <div className="text-sm font-black text-slate-700">10,000+ Customers</div>
-              </div>
+          {/* Right Image / 3D Illustration */}
+          <div className="lg:w-[50%] w-full flex justify-center relative">
+            <div className="relative w-full max-w-[500px]">
+              <img 
+                src="/images/motor-hero-3d-car-clean.png" 
+                alt={pageTitle} 
+                className="w-full h-auto object-contain animate-float" 
+              />
             </div>
           </div>
         </div>
@@ -412,6 +433,8 @@ const MotorInsurance = () => {
 
       {/* Partner Insurers */}
       <PartnerLogos />
+
+      <TrustSection />
 
       {/* Bottom CTA Banner */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 mt-16">

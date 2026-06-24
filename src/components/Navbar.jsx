@@ -12,6 +12,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [claimsOpen, setClaimsOpen] = useState(false);
   const [logo, setLogo] = useState({ url: '/logo.png', width: '180' });
   const [contact, setContact] = useState({});
   const location = useLocation();
@@ -44,8 +45,13 @@ const Navbar = () => {
   ];
 
   const navLinks = [
-    { name: 'Renew Policy', path: '/renew' },
-    { name: 'Claim Support', path: '/claims' },
+    { name: 'Renew Policy', path: '/policy-renewal' },
+    { 
+      name: 'Claim Support', 
+      path: '/claim-assistance'
+    },
+    { name: 'About', path: '/about-us' },
+    { name: 'Contact', path: '/contact-us' }
   ];
 
   return (
@@ -110,17 +116,56 @@ const Navbar = () => {
             </div>
 
             {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-4 py-2 text-[14px] font-semibold rounded-lg transition-colors ${
-                  location.pathname === link.path
-                    ? 'text-teal-600 bg-teal-50'
-                    : 'text-slate-700 hover:text-teal-600 hover:bg-slate-50'
-                }`}
+              <div 
+                key={link.name} 
+                className="relative group"
+                onMouseEnter={() => link.subLinks && setClaimsOpen(true)}
+                onMouseLeave={() => link.subLinks && setClaimsOpen(false)}
               >
-                {link.name}
-              </Link>
+                <Link
+                  to={link.path}
+                  className={`flex items-center gap-1 px-4 py-2 text-[14px] font-semibold rounded-lg transition-colors ${
+                    location.pathname === link.path
+                      ? 'text-teal-600 bg-teal-50'
+                      : 'text-slate-700 hover:text-teal-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {link.name}
+                  {link.subLinks && <ChevronDown size={14} className={`transition-transform duration-200 ${claimsOpen ? 'rotate-180' : ''}`} />}
+                </Link>
+                
+                {/* Dropdown Menu */}
+                {link.subLinks && (
+                  <AnimatePresence>
+                    {claimsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl shadow-teal-900/10 border border-slate-100 p-2 py-3"
+                      >
+                        {link.subLinks.map((sub) => {
+                          const SubIcon = sub.icon;
+                          return (
+                            <Link
+                              key={sub.path}
+                              to={sub.path}
+                              onClick={() => setClaimsOpen(false)}
+                              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors group"
+                            >
+                              <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0">
+                                <SubIcon size={16} className="text-teal-600" strokeWidth={2} />
+                              </div>
+                              <span className="text-[13px] font-semibold text-slate-700 group-hover:text-slate-900">{sub.name}</span>
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
+              </div>
             ))}
           </div>
 
@@ -152,9 +197,9 @@ const Navbar = () => {
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Link
                 to="/login"
-                className="flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-xl font-semibold text-[13px] hover:bg-teal-700 transition-colors shadow-lg shadow-teal-900/10"
+                className="flex items-center gap-2 px-5 py-2.5 bg-[#0c1b33] text-white rounded-xl font-semibold text-[13px] hover:bg-[#162a4a] transition-colors shadow-lg shadow-[#0c1b33]/15"
               >
-                <LogIn size={15} />
+                <LogIn size={15} style={{ color: '#dfb15b' }} />
                 Login
               </Link>
             </motion.div>
@@ -196,8 +241,10 @@ const Navbar = () => {
               </div>
 
               <Link to="/" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">Home</Link>
-              <Link to="/renew" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">Renew Policy</Link>
-              <Link to="/claims" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">Claim Support</Link>
+              <Link to="/policy-renewal" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">Renew Policy</Link>
+              <Link to="/claim-assistance" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">Claim Support</Link>
+              <Link to="/about-us" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">About</Link>
+              <Link to="/contact-us" className="block px-3 py-2.5 rounded-lg text-[15px] font-semibold text-slate-800 hover:bg-slate-50 hover:text-teal-600">Contact</Link>
 
 
               <div className="px-3 pt-3 pb-1">
@@ -227,8 +274,8 @@ const Navbar = () => {
                   <User size={14} />
                   Admin Portal
                 </Link>
-                <Link to="/login" className="flex items-center justify-center gap-2 px-4 py-2.5 bg-teal-600 text-white rounded-xl font-semibold text-[13px] hover:bg-teal-700 transition-colors">
-                  <LogIn size={14} />
+                <Link to="/login" className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0c1b33] text-white rounded-xl font-semibold text-[13px] hover:bg-[#162a4a] transition-colors">
+                  <LogIn size={14} style={{ color: '#dfb15b' }} />
                   Login
                 </Link>
               </div>

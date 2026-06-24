@@ -7,6 +7,19 @@ import {
   Save, Bell, Layout, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { db } from '../utils/db';
+import HeroBackground from '../components/HeroBackground';
+import DashboardView from '../components/admin/DashboardView';
+import QuotesView from '../components/admin/QuotesView';
+import InquiriesView from '../components/admin/InquiriesView';
+import RenewalsView from '../components/admin/RenewalsView';
+import ClaimsView from '../components/admin/ClaimsView';
+import GaragesView from '../components/admin/GaragesView';
+import ReportsView from '../components/admin/ReportsView';
+import CmsView from '../components/admin/CmsView';
+import ProductsView from '../components/admin/ProductsView';
+import BlogsView from '../components/admin/BlogsView';
+import SettingsView from '../components/admin/SettingsView';
+import SeoView from '../components/admin/SeoView';
 
 const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -20,6 +33,15 @@ const AdminDashboard = () => {
   const [endorsements, setEndorsements] = useState([]);
   const [claims, setClaims] = useState([]);
   const [chats, setChats] = useState([]);
+  const [inquiries, setInquiries] = useState([]);
+  const [garages, setGarages] = useState([]);
+  const [renewals, setRenewals] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [settings, setSettings] = useState({});
+  const [seo, setSeo] = useState({});
   const [banner, setBanner] = useState({ imageUrl: '', redirectUrl: '' });
 
   // Content Manager States
@@ -32,7 +54,7 @@ const AdminDashboard = () => {
   const [cmSaveMsg, setCmSaveMsg] = useState('');
   
   // Navigation
-  const [activeTab, setActiveTab] = useState('leads');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLead, setSelectedLead] = useState(null);
   
@@ -70,6 +92,15 @@ const AdminDashboard = () => {
     setEndorsements(db.getEndorsements());
     setClaims(db.getClaims());
     setChats(db.getChats());
+    setInquiries(db.getInquiries ? db.getInquiries() : []);
+    setGarages(db.getGarages ? db.getGarages() : []);
+    setRenewals(db.getRenewals ? db.getRenewals() : []);
+    setProducts(db.getProducts ? db.getProducts() : []);
+    setBlogs(db.getBlogs ? db.getBlogs() : []);
+    setFaqs(db.getFaqs ? db.getFaqs() : []);
+    setTestimonials(db.getTestimonials ? db.getTestimonials() : []);
+    setSettings(db.getSettings ? db.getSettings() : {});
+    setSeo(db.getSeo ? db.getSeo() : {});
     setBanner(db.getBanner());
     try {
       setAnnouncement(db.getAnnouncement ? db.getAnnouncement() : { enabled:false, text:'', type:'info', link:'', linkText:'Know More' });
@@ -240,58 +271,79 @@ const AdminDashboard = () => {
   // LOGIN SCREEN
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-4 font-sans">
+      <div className="min-h-screen bg-[#fdfbf7] flex items-center justify-center p-4 font-sans relative overflow-hidden">
+        {/* Dynamic Background Elements */}
+        <HeroBackground isDark={false} icons={[Lock, ShieldAlert, Database]} />
+
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white/5 border-white/10 border border-white/10 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md relative overflow-hidden"
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="bg-white/80 backdrop-blur-2xl border border-white p-8 sm:p-12 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] w-full max-w-md relative z-10"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 rounded-full blur-2xl"></div>
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-brand-gold/10 border border-brand-gold/20 text-brand-gold rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Lock size={32} />
-            </div>
-            <h2 className="text-2xl font-black text-white">Admin Portal</h2>
-            <p className="text-slate-400 text-sm mt-1">Manage leads, policies, claims, & banners</p>
+          <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-white/10 rounded-[2.5rem] pointer-events-none"></div>
+          
+          <div className="text-center mb-10 relative">
+            <motion.div 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+              className="w-20 h-20 bg-gradient-to-br from-teal-500 to-blue-600 shadow-xl shadow-teal-500/30 text-white rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 transform rotate-3 hover:rotate-0 transition-transform"
+            >
+              <Lock size={36} />
+            </motion.div>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Admin Portal</h2>
+            <p className="text-slate-500 font-medium text-sm mt-2">Secure access for PolicyPerfect staff</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-6 relative">
             {error && (
-              <div className="bg-red-500/10 border border-red-500/25 text-red-400 p-3.5 rounded-xl text-xs text-center font-bold">
+              <motion.div 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl text-sm text-center font-bold shadow-sm"
+              >
                 {error}
-              </div>
+              </motion.div>
             )}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Username</label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 mb-2 ml-1">Username</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <User className="text-slate-400 group-focus-within:text-teal-600 transition-colors" size={20} />
+                </div>
                 <input 
                   type="text" 
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-200 rounded-2xl text-slate-900 outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-semibold text-[15px]"
                   placeholder="admin@policyperfect"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-500 mb-2 ml-1">Password</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                  <Lock className="text-slate-400 group-focus-within:text-teal-600 transition-colors" size={20} />
+                </div>
                 <input 
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition-all font-medium"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50/50 border border-slate-200 rounded-2xl text-slate-900 outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all font-semibold text-[15px] tracking-widest placeholder:tracking-normal"
                   placeholder="••••••••"
                 />
               </div>
             </div>
             <button 
               type="submit"
-              className="w-full bg-brand-gold text-brand-navy font-bold py-3.5 rounded-xl shadow-lg shadow-brand-gold/20 transition-all"
+              className="w-full bg-slate-900 text-white font-black text-[15px] py-4 rounded-2xl shadow-xl shadow-slate-900/20 hover:bg-teal-600 hover:shadow-teal-600/30 transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden group"
             >
-              Sign In
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                Secure Login <ChevronDown className="rotate-[-90deg] group-hover:translate-x-1 transition-transform" size={18} />
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           </form>
         </motion.div>
@@ -301,22 +353,26 @@ const AdminDashboard = () => {
 
   // MAIN PORTAL
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans pb-24">
-      {/* Top Navbar */}
-      <div className="bg-white/5 border-white/10 border-b border-white/10 px-4 py-5 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fdfbf7] text-slate-900 font-sans pb-24 relative overflow-hidden">
+      {/* Background Elements */}
+      <HeroBackground isDark={false} icons={[Database, ShieldAlert, FileText]} />
+
+      <div className="relative z-10">
+        {/* Top Navbar */}
+        <div className="bg-white/70 backdrop-blur-xl border-b border-white shadow-sm px-4 py-5 sm:px-6 lg:px-8">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-gold text-brand-navy flex items-center justify-center">
-              <Database className="text-white" size={24} />
+              <Database className="text-slate-900" size={24} />
             </div>
             <div>
-              <h1 className="text-lg font-black text-white leading-tight font-sans">PolicyPerfect Admin Dashboard</h1>
-              <p className="text-xs text-slate-400">Manage all customer queries & setups</p>
+              <h1 className="text-lg font-black text-slate-900 leading-tight font-sans">PolicyPerfect Admin Dashboard</h1>
+              <p className="text-xs text-slate-600">Manage all customer queries & setups</p>
             </div>
           </div>
           <button 
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 border border-white/10 rounded-xl text-xs font-bold hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 transition-all"
+            className="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-xl text-xs font-bold hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-400 transition-all"
           >
             Logout <LogOut size={14} />
           </button>
@@ -327,98 +383,100 @@ const AdminDashboard = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* Left Navigation Menu */}
-          <div className="w-full lg:w-1/4 space-y-2.5">
-            {[ 
-              { id: 'leads', icon: Database, label: 'Lead CRM', count: leads.length },
-              { id: 'policies', icon: ShieldAlert, label: 'Active Policies', count: policies.length },
-              { id: 'claims', icon: AlertCircle, label: 'Claims Intimated', count: claims.length },
-              { id: 'endorsements', icon: FileText, label: 'Endorsements', count: endorsements.filter(r => r.status==='Pending').length },
-              { id: 'chats', icon: MessageSquare, label: 'Support Chats', count: chats.length },
-              { id: 'content', icon: Layout, label: 'Content Manager' },
-              { id: 'banners', icon: Image, label: 'Homepage Banner' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setSearchTerm(''); setCmSaveMsg(''); }}
-                className={`w-full flex items-center gap-3.5 px-5 py-4 rounded-2xl font-bold text-sm transition-all text-left ${
-                  activeTab === tab.id
-                    ? 'bg-brand-gold text-brand-navy shadow-lg shadow-brand-gold/20'
-                    : 'bg-white/5 border-white/10 border border-white/10 hover:bg-slate-800 text-slate-400 hover:text-slate-100'
-                }`}
-              >
-                <tab.icon size={18} />
-                {tab.title}
-                {tab.id === 'content' && (
-                  <span className="ml-auto text-[9px] font-black bg-teal-500 text-white px-1.5 py-0.5 rounded uppercase tracking-wider">New</span>
-                )}
-              </button>
+          <div className="w-full lg:w-1/4 space-y-6">
+            {[
+              {
+                title: "Overview",
+                items: [
+                  { id: 'dashboard', icon: Layout, label: 'Dashboard Overview' }
+                ]
+              },
+              {
+                title: "Customer Requests",
+                items: [
+                  { id: 'leads', icon: Database, label: 'Quote Requests', count: leads.length },
+                  { id: 'renewals', icon: RefreshCw, label: 'Renewal Requests', count: renewals.length },
+                  { id: 'inquiries', icon: MessageSquare, label: 'Contact Inquiries', count: inquiries.length },
+                  { id: 'chats', icon: MessageSquare, label: 'Support Chats', count: chats.length }
+                ]
+              },
+              {
+                title: "Core Operations",
+                items: [
+                  { id: 'policies', icon: ShieldAlert, label: 'Active Policies', count: policies.length },
+                  { id: 'claims', icon: AlertCircle, label: 'Claims Intimation', count: claims.length },
+                  { id: 'endorsements', icon: FileText, label: 'Endorsements', count: endorsements.filter(r => r.status==='Pending').length },
+                  { id: 'garages', icon: Tag, label: 'Cashless Garages', count: garages.length }
+                ]
+              },
+              {
+                title: "Website Management",
+                items: [
+                  { id: 'products', icon: ShieldAlert, label: 'Insurance Products', count: products.length },
+                  { id: 'blogs', icon: FileText, label: 'Blog Management', count: blogs.length },
+                  { id: 'content', icon: Layout, label: 'Website CMS' }
+                ]
+              },
+              {
+                title: "System & Analytics",
+                items: [
+                  { id: 'reports', icon: FileText, label: 'Reports Center' },
+                  { id: 'seo', icon: Search, label: 'SEO Management' },
+                  { id: 'settings', icon: Bell, label: 'Website Settings' }
+                ]
+              }
+            ].map((group, groupIdx) => (
+              <div key={groupIdx} className="space-y-2">
+                <h4 className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">{group.title}</h4>
+                <div className="space-y-1.5">
+                  {group.items.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => { setActiveTab(tab.id); setSearchTerm(''); }}
+                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl font-bold text-sm transition-all text-left border ${
+                        activeTab === tab.id
+                          ? 'bg-teal-600 text-white shadow-lg shadow-teal-500/30 border-teal-500'
+                          : 'bg-white/60 text-slate-600 hover:text-teal-600 hover:bg-white border-transparent hover:border-white shadow-sm'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <tab.icon size={16} />
+                        {tab.label}
+                      </div>
+                      {tab.count !== undefined && (
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-black ${activeTab === tab.id ? 'bg-white text-teal-600' : 'bg-slate-100 text-slate-500'}`}>
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
 
           {/* Right Workspace Area */}
           <div className="w-full lg:w-3/4">
 
-            {/* TAB 1: LEADS MANAGEMENT */}
-            {activeTab === 'leads' && (
-              <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <h2 className="text-xl font-black">Insurance Leads</h2>
-                  <div className="relative w-full sm:w-72">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                    <input 
-                      type="text" 
-                      placeholder="Search name, product, mobile..." 
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 bg-white/5 border-white/10 border border-white/10 rounded-xl text-slate-200 outline-none focus:border-brand-gold text-sm"
-                    />
-                  </div>
-                </div>
+            {/* TAB 0: DASHBOARD */}
+            {activeTab === 'dashboard' && (
+              <DashboardView 
+                stats={{ 
+                  leads: leads.length, 
+                  policies: policies.length, 
+                  endorsements: endorsements.filter(r => r.status==='Pending').length 
+                }} 
+              />
+            )}
 
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2rem] overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-slate-400">
-                      <thead className="bg-brand-navy-light text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
-                        <tr>
-                          <th className="px-6 py-4">Date</th>
-                          <th className="px-6 py-4">Product</th>
-                          <th className="px-6 py-4">Name</th>
-                          <th className="px-6 py-4">Mobile</th>
-                          <th className="px-6 py-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/5 font-semibold">
-                        {filteredLeads.length > 0 ? (
-                          filteredLeads.map((l) => (
-                            <tr key={l.id} className="hover:bg-white/5 transition-colors">
-                              <td className="px-6 py-4 text-xs text-slate-500 whitespace-nowrap">{l.date}</td>
-                              <td className="px-6 py-4">
-                                <span className="bg-brand-gold/10 text-brand-gold border border-brand-gold/20 px-2.5 py-0.5 rounded text-[11px]">
-                                  {l.productType}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4 text-slate-200">{l.name}</td>
-                              <td className="px-6 py-4">{l.mobile}</td>
-                              <td className="px-6 py-4 text-right whitespace-nowrap">
-                                <button onClick={() => setSelectedLead(l)} className="text-brand-gold hover:text-white p-2 rounded-lg bg-white/5 hover:bg-brand-gold text-brand-navy transition-all mr-2">
-                                  <Eye size={16} />
-                                </button>
-                                <button onClick={() => handleDeleteLead(l.id)} className="text-red-400 hover:text-white p-2 rounded-lg bg-white/5 hover:bg-red-600 transition-all">
-                                  <Trash2 size={16} />
-                                </button>
-                              </td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={5} className="px-6 py-12 text-center text-slate-500">No leads found.</td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+            {/* TAB 1: QUOTE REQUESTS */}
+            {activeTab === 'leads' && (
+              <QuotesView leads={leads} setLeads={setLeads} />
+            )}
+
+            {/* TAB 1.5: INQUIRIES */}
+            {activeTab === 'inquiries' && (
+              <InquiriesView inquiries={inquiries} setInquiries={setInquiries} />
             )}
 
             {/* TAB 2: POLICIES REGISTRY */}
@@ -435,24 +493,24 @@ const AdminDashboard = () => {
                 </div>
 
                 {showAddPolicy && (
-                  <form onSubmit={handleAddPolicySubmit} className="bg-white/5 border-white/10 border border-white/10 p-6 rounded-3xl space-y-4">
-                    <h3 className="font-bold text-white mb-2">Policy Creation Form</h3>
+                  <form onSubmit={handleAddPolicySubmit} className="bg-white border-slate-200 border border-slate-200 p-6 rounded-3xl space-y-4">
+                    <h3 className="font-bold text-slate-900 mb-2">Policy Creation Form</h3>
                     <div className="grid md:grid-cols-3 gap-4">
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Policy Number *</label>
-                        <input type="text" placeholder="e.g. PP-MOT-998822" required className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.policyNo} onChange={(e) => setNewPolicy({...newPolicy, policyNo: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Policy Number *</label>
+                        <input type="text" placeholder="e.g. PP-MOT-998822" required className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.policyNo} onChange={(e) => setNewPolicy({...newPolicy, policyNo: e.target.value})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Customer Name *</label>
-                        <input type="text" placeholder="Full Name" required className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.name} onChange={(e) => setNewPolicy({...newPolicy, name: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Customer Name *</label>
+                        <input type="text" placeholder="Full Name" required className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.name} onChange={(e) => setNewPolicy({...newPolicy, name: e.target.value})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Registered Mobile *</label>
-                        <input type="tel" maxLength={10} placeholder="10-digit number" required className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.mobile} onChange={(e) => setNewPolicy({...newPolicy, mobile: e.target.value.replace(/\D/g,'')})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Registered Mobile *</label>
+                        <input type="tel" maxLength={10} placeholder="10-digit number" required className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.mobile} onChange={(e) => setNewPolicy({...newPolicy, mobile: e.target.value.replace(/\D/g,'')})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Partner Insurer</label>
-                        <select className="w-full px-3 py-2 bg-brand-navy-light border border-white/10 rounded-lg text-white" value={newPolicy.insurer} onChange={(e) => setNewPolicy({...newPolicy, insurer: e.target.value})}>
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Partner Insurer</label>
+                        <select className="w-full px-3 py-2 bg-brand-navy-light border border-slate-200 rounded-lg text-slate-900" value={newPolicy.insurer} onChange={(e) => setNewPolicy({...newPolicy, insurer: e.target.value})}>
                           <option value="HDFC ERGO">HDFC ERGO</option>
                           <option value="ICICI Lombard">ICICI Lombard</option>
                           <option value="Star Health">Star Health</option>
@@ -461,8 +519,8 @@ const AdminDashboard = () => {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Product Category</label>
-                        <select className="w-full px-3 py-2 bg-brand-navy-light border border-white/10 rounded-lg text-white" value={newPolicy.productType} onChange={(e) => setNewPolicy({...newPolicy, productType: e.target.value})}>
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Product Category</label>
+                        <select className="w-full px-3 py-2 bg-brand-navy-light border border-slate-200 rounded-lg text-slate-900" value={newPolicy.productType} onChange={(e) => setNewPolicy({...newPolicy, productType: e.target.value})}>
                           <option value="Motor Insurance">Motor Insurance</option>
                           <option value="Health Insurance">Health Insurance</option>
                           <option value="Term Life Insurance">Term Life Insurance</option>
@@ -471,24 +529,24 @@ const AdminDashboard = () => {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Asset/Vehicle Details</label>
-                        <input type="text" placeholder="e.g. Swift LXI, Home Structure" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.vehicleDetails} onChange={(e) => setNewPolicy({...newPolicy, vehicleDetails: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Asset/Vehicle Details</label>
+                        <input type="text" placeholder="e.g. Swift LXI, Home Structure" className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.vehicleDetails} onChange={(e) => setNewPolicy({...newPolicy, vehicleDetails: e.target.value})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Reg/License Plate (Optional)</label>
-                        <input type="text" placeholder="e.g. DL-3C-AS-9988" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.regNo} onChange={(e) => setNewPolicy({...newPolicy, regNo: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Reg/License Plate (Optional)</label>
+                        <input type="text" placeholder="e.g. DL-3C-AS-9988" className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.regNo} onChange={(e) => setNewPolicy({...newPolicy, regNo: e.target.value})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Premium Amount</label>
-                        <input type="text" placeholder="e.g. ₹9,850" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.premium} onChange={(e) => setNewPolicy({...newPolicy, premium: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Premium Amount</label>
+                        <input type="text" placeholder="e.g. ₹9,850" className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.premium} onChange={(e) => setNewPolicy({...newPolicy, premium: e.target.value})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Start Date</label>
-                        <input type="date" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.startDate} onChange={(e) => setNewPolicy({...newPolicy, startDate: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">Start Date</label>
+                        <input type="date" className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.startDate} onChange={(e) => setNewPolicy({...newPolicy, startDate: e.target.value})} />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">End Date</label>
-                        <input type="date" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white" value={newPolicy.endDate} onChange={(e) => setNewPolicy({...newPolicy, endDate: e.target.value})} />
+                        <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1">End Date</label>
+                        <input type="date" className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-900" value={newPolicy.endDate} onChange={(e) => setNewPolicy({...newPolicy, endDate: e.target.value})} />
                       </div>
                     </div>
                     <button type="submit" className="px-6 py-2.5 bg-brand-gold text-brand-navy font-bold rounded-xl text-xs transition-colors">
@@ -497,10 +555,10 @@ const AdminDashboard = () => {
                   </form>
                 )}
 
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2rem] overflow-hidden">
+                <div className="bg-white border-slate-200 border border-slate-200 rounded-[2rem] overflow-hidden">
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-slate-400">
-                      <thead className="bg-brand-navy-light text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
+                    <table className="w-full text-left text-sm text-slate-600">
+                      <thead className="bg-brand-navy-light text-slate-800 border-b border-slate-200 text-xs font-bold uppercase">
                         <tr>
                           <th className="px-6 py-4">Policy No</th>
                           <th className="px-6 py-4">Customer</th>
@@ -513,14 +571,14 @@ const AdminDashboard = () => {
                       <tbody className="divide-y divide-white/5 font-semibold">
                         {filteredPolicies.length > 0 ? (
                           filteredPolicies.map((p) => (
-                            <tr key={p.id} className="hover:bg-white/5 transition-colors">
-                              <td className="px-6 py-4 text-slate-200 font-bold">{p.policyNo}</td>
-                              <td className="px-6 py-4 text-slate-300">{p.name}</td>
+                            <tr key={p.id} className="hover:bg-white transition-colors">
+                              <td className="px-6 py-4 text-slate-800 font-bold">{p.policyNo}</td>
+                              <td className="px-6 py-4 text-slate-700">{p.name}</td>
                               <td className="px-6 py-4">{p.mobile}</td>
                               <td className="px-6 py-4 text-xs">{p.insurer}</td>
                               <td className="px-6 py-4 text-xs">{p.productType}</td>
                               <td className="px-6 py-4 text-right">
-                                <button onClick={() => handleDeletePolicy(p.id)} className="text-red-400 hover:text-white p-2 rounded-lg bg-white/5 hover:bg-red-600 transition-all">
+                                <button onClick={() => handleDeletePolicy(p.id)} className="text-red-400 hover:text-slate-900 p-2 rounded-lg bg-white hover:bg-red-600 transition-all">
                                   <Trash2 size={16} />
                                 </button>
                               </td>
@@ -542,10 +600,10 @@ const AdminDashboard = () => {
             {activeTab === 'endorsements' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-black">Endorsement / Policy Update Requests</h2>
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2rem] overflow-hidden">
+                <div className="bg-white border-slate-200 border border-slate-200 rounded-[2rem] overflow-hidden">
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm text-slate-400">
-                      <thead className="bg-brand-navy-light text-slate-200 border-b border-white/10 text-xs font-bold uppercase">
+                    <table className="w-full text-left text-sm text-slate-600">
+                      <thead className="bg-brand-navy-light text-slate-800 border-b border-slate-200 text-xs font-bold uppercase">
                         <tr>
                           <th className="px-6 py-4">Date</th>
                           <th className="px-6 py-4">Policy No</th>
@@ -558,11 +616,11 @@ const AdminDashboard = () => {
                       <tbody className="divide-y divide-white/5 font-semibold">
                         {endorsements.length > 0 ? (
                           endorsements.map((req) => (
-                            <tr key={req.id} className="hover:bg-white/5 transition-colors">
+                            <tr key={req.id} className="hover:bg-white transition-colors">
                               <td className="px-6 py-4 text-xs text-slate-500 whitespace-nowrap">{req.date}</td>
-                              <td className="px-6 py-4 text-slate-200 font-bold">{req.policyNo}</td>
+                              <td className="px-6 py-4 text-slate-800 font-bold">{req.policyNo}</td>
                               <td className="px-6 py-4 text-xs">{req.changeType}</td>
-                              <td className="px-6 py-4 text-slate-300">{req.newValue}</td>
+                              <td className="px-6 py-4 text-slate-700">{req.newValue}</td>
                               <td className="px-6 py-4">
                                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${
                                   req.status === 'Approved' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 
@@ -575,10 +633,10 @@ const AdminDashboard = () => {
                               <td className="px-6 py-4 text-right whitespace-nowrap">
                                 {req.status === 'Pending' && (
                                   <>
-                                    <button onClick={() => handleApproveEndorsement(req)} className="text-green-400 hover:text-white p-2 rounded-lg bg-white/5 hover:bg-green-600 transition-all mr-2" title="Approve & Merge">
+                                    <button onClick={() => handleApproveEndorsement(req)} className="text-green-400 hover:text-slate-900 p-2 rounded-lg bg-white hover:bg-green-600 transition-all mr-2" title="Approve & Merge">
                                       <Check size={16} />
                                     </button>
-                                    <button onClick={() => handleRejectEndorsement(req.id)} className="text-red-400 hover:text-white p-2 rounded-lg bg-white/5 hover:bg-red-600 transition-all" title="Reject">
+                                    <button onClick={() => handleRejectEndorsement(req.id)} className="text-red-400 hover:text-slate-900 p-2 rounded-lg bg-white hover:bg-red-600 transition-all" title="Reject">
                                       <X size={16} />
                                     </button>
                                   </>
@@ -598,57 +656,42 @@ const AdminDashboard = () => {
               </div>
             )}
 
+            {/* TAB 3: RENEWAL REQUESTS */}
+            {activeTab === 'renewals' && (
+              <RenewalsView renewals={renewals} setRenewals={setRenewals} />
+            )}
+
             {/* TAB 4: CLAIMS INTIMATION LOGS */}
             {activeTab === 'claims' && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-black">Claim Intimation Logs</h2>
-                <div className="space-y-4">
-                  {claims.length === 0 ? (
-                    <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-12 text-center text-slate-500 font-semibold">
-                      No claims reported yet.
-                    </div>
-                  ) : (
-                    claims.map((c) => (
-                      <div key={c.id} className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
-                        <div className="flex justify-between items-start border-b border-white/5 pb-4">
-                          <div>
-                            <span className="bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                              Claim ID: {c.id}
-                            </span>
-                            <h3 className="text-base font-black mt-2 text-white">Policy: {c.policyNo} ({c.productType})</h3>
-                          </div>
-                          <div className="text-xs text-slate-500 font-bold">{c.date}</div>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-4 text-xs font-bold text-slate-400">
-                          <div><span className="block text-[10px] text-slate-500 mb-1">CUSTOMER</span><span className="text-slate-200">{c.name} (Mob: {c.mobile})</span></div>
-                          {c.vehicleDetails && <div><span className="block text-[10px] text-slate-500 mb-1">ASSET/VEHICLE</span><span className="text-slate-200">{c.vehicleDetails}</span></div>}
-                          <div><span className="block text-[10px] text-slate-500 mb-1">ACCIDENT DATETIME</span><span className="text-slate-200">{c.accidentDate} @ {c.accidentTime}</span></div>
-                          <div><span className="block text-[10px] text-slate-500 mb-1">ACCIDENT LOCATION</span><span className="text-slate-200">{c.location}</span></div>
-                          {c.driverDetails && <div><span className="block text-[10px] text-slate-500 mb-1">DRIVER INFO</span><span className="text-slate-200">{c.driverDetails}</span></div>}
-                          {c.witnessContact && <div><span className="block text-[10px] text-slate-500 mb-1">CONTACTS</span><span className="text-slate-200">{c.witnessContact}</span></div>}
-                        </div>
-
-                        <div className="bg-brand-navy-light p-4 rounded-xl border border-white/5">
-                          <span className="block text-[10px] font-bold text-slate-500 mb-1">INCIDENT DESCRIPTION</span>
-                          <p className="text-slate-300 text-xs font-semibold leading-relaxed">{c.description}</p>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
+              <ClaimsView claims={claims} setClaims={setClaims} />
             )}
+
+            {/* TAB 4.1: CASHLESS GARAGES */}
+            {activeTab === 'garages' && (
+              <GaragesView garages={garages} setGarages={setGarages} />
+            )}
+
+            {/* TAB 4.2: REPORTS CENTER */}
+            {activeTab === 'reports' && (
+              <ReportsView leads={leads} policies={policies} claims={claims} renewals={renewals} />
+            )}
+
+            {/* PHASE 3 & 4 COMPONENTS */}
+            {activeTab === 'products' && <ProductsView products={products} setProducts={setProducts} />}
+            {activeTab === 'blogs' && <BlogsView blogs={blogs} setBlogs={setBlogs} />}
+            {activeTab === 'content' && <CmsView banner={banner} setBanner={setBanner} faqs={faqs} setFaqs={setFaqs} testimonials={testimonials} setTestimonials={setTestimonials} about={aboutUs} setAbout={setAboutUs} />}
+            {activeTab === 'settings' && <SettingsView settings={settings} setSettings={setSettings} />}
+            {activeTab === 'seo' && <SeoView seo={seo} setSeo={setSeo} />}
 
             {/* TAB 5: LIVE SUPPORT CHAT HUB */}
             {activeTab === 'chats' && (
               <div className="space-y-6">
                 <h2 className="text-xl font-black">Live Support Messages</h2>
-                <div className="flex bg-white/5 border-white/10 border border-white/10 rounded-[2.5rem] overflow-hidden min-h-[500px]">
+                <div className="flex bg-white border-slate-200 border border-slate-200 rounded-[2.5rem] overflow-hidden min-h-[500px]">
                   
                   {/* Active Chats List */}
-                  <div className="w-1/3 border-r border-white/10 flex flex-col">
-                    <div className="p-4 border-b border-white/10 font-bold text-white text-xs uppercase tracking-wider">Conversations</div>
+                  <div className="w-1/3 border-r border-slate-200 flex flex-col">
+                    <div className="p-4 border-b border-slate-200 font-bold text-slate-900 text-xs uppercase tracking-wider">Conversations</div>
                     <div className="flex-grow overflow-y-auto divide-y divide-white/5">
                       {chats.length === 0 ? (
                         <div className="p-4 text-center text-slate-500 text-xs font-semibold">No active chats.</div>
@@ -657,10 +700,10 @@ const AdminDashboard = () => {
                           <div 
                             key={chat.mobile}
                             onClick={() => setActiveChatId(chat.mobile)}
-                            className={`p-4 cursor-pointer hover:bg-white/5 transition-all ${activeChatId === chat.mobile ? 'bg-white/5' : ''}`}
+                            className={`p-4 cursor-pointer hover:bg-white transition-all ${activeChatId === chat.mobile ? 'bg-white' : ''}`}
                           >
-                            <div className="font-bold text-slate-200 text-sm">{chat.name || 'Anonymous'}</div>
-                            <div className="text-[11px] text-slate-400 mt-0.5">Mob: {chat.mobile}</div>
+                            <div className="font-bold text-slate-800 text-sm">{chat.name || 'Anonymous'}</div>
+                            <div className="text-[11px] text-slate-600 mt-0.5">Mob: {chat.mobile}</div>
                             <div className="text-xs text-slate-500 truncate mt-1">
                               {chat.messages[chat.messages.length - 1]?.text}
                             </div>
@@ -677,10 +720,10 @@ const AdminDashboard = () => {
                       return (
                         <>
                           {/* Chat Header */}
-                          <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/5 border-white/10">
+                          <div className="p-4 border-b border-slate-200 flex justify-between items-center bg-white border-slate-200">
                             <div>
-                              <div className="font-bold text-white text-sm">{chat.name || 'Customer'}</div>
-                              <div className="text-[10px] text-slate-400">Mobile: {chat.mobile}</div>
+                              <div className="font-bold text-slate-900 text-sm">{chat.name || 'Customer'}</div>
+                              <div className="text-[10px] text-slate-600">Mobile: {chat.mobile}</div>
                             </div>
                           </div>
 
@@ -689,11 +732,11 @@ const AdminDashboard = () => {
                             {chat.messages.map((m, idx) => (
                               <div key={idx} className={`flex flex-col ${m.sender === 'admin' ? 'items-end' : 'items-start'}`}>
                                 <div className={`px-4 py-2.5 rounded-2xl max-w-sm text-xs font-semibold leading-relaxed ${
-                                  m.sender === 'admin' ? 'bg-brand-gold text-brand-navy rounded-tr-none' : 'bg-white/5 border-white/10 border border-white/10 text-slate-200 rounded-tl-none'
+                                  m.sender === 'admin' ? 'bg-brand-gold text-brand-navy rounded-tr-none' : 'bg-white border-slate-200 border border-slate-200 text-slate-800 rounded-tl-none'
                                 }`}>
                                   {m.text}
                                   {m.fileName && (
-                                    <div className="mt-2 pt-2 border-t border-white/10 flex items-center gap-1.5 text-[10px] text-blue-300 font-bold">
+                                    <div className="mt-2 pt-2 border-t border-slate-200 flex items-center gap-1.5 text-[10px] text-blue-300 font-bold">
                                       <FileText size={12} /> Doc: {m.fileName}
                                     </div>
                                   )}
@@ -704,13 +747,13 @@ const AdminDashboard = () => {
                           </div>
 
                           {/* Chat Input */}
-                          <form onSubmit={handleSendChatReply} className="p-4 border-t border-white/10 bg-white/5 border-white/10 flex gap-3">
+                          <form onSubmit={handleSendChatReply} className="p-4 border-t border-slate-200 bg-white border-slate-200 flex gap-3">
                             <input 
                               type="text" 
                               placeholder="Type your reply here..." 
                               value={chatReplyText}
                               onChange={(e) => setChatReplyText(e.target.value)}
-                              className="flex-grow px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold text-xs font-medium"
+                              className="flex-grow px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 outline-none focus:border-teal-500 text-xs font-medium"
                             />
                             <button type="submit" className="px-5 bg-brand-gold text-brand-navy transition-all">
                               Send
@@ -729,302 +772,6 @@ const AdminDashboard = () => {
               </div>
             )}
 
-            {/* TAB 6: BANNER SETTINGS */}
-            {activeTab === 'banner' && (
-              <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2.5rem] p-8 max-w-2xl">
-                <h2 className="text-xl font-black mb-1">Homepage Hero Banner Control</h2>
-                <p className="text-xs text-slate-400 mb-6 font-semibold">Change the main image and redirect URL of the website's Hero section.</p>
-
-                <form onSubmit={handleBannerSave} className="space-y-5">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Hero Image Banner URL *</label>
-                    <input 
-                      type="url"
-                      required
-                      placeholder="Enter image URL (e.g. Unsplash URL)"
-                      value={banner.imageUrl}
-                      onChange={(e) => setBanner({...banner, imageUrl: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold text-xs font-medium"
-                    />
-                    {banner.imageUrl && (
-                      <img src={banner.imageUrl} alt="Preview" className="mt-3 h-32 rounded-xl object-cover w-full opacity-80" onError={(e)=>e.target.style.display='none'} />
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Click Redirection Path / Link *</label>
-                    <input 
-                      type="text"
-                      required
-                      placeholder="e.g. /claims or external https link"
-                      value={banner.redirectUrl}
-                      onChange={(e) => setBanner({...banner, redirectUrl: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-brand-gold text-xs font-medium"
-                    />
-                  </div>
-
-                  <button 
-                    type="submit"
-                    className="px-6 py-3 bg-brand-gold text-brand-navy font-bold rounded-xl text-xs transition-colors"
-                  >
-                    Save Banner Changes
-                  </button>
-                </form>
-              </div>
-            )}
-
-            {/* TAB 7: CONTENT MANAGER */}
-            {activeTab === 'content' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-xl font-black">Content Manager</h2>
-                    <p className="text-xs text-slate-400 mt-1">Control announcement bar, offer cards, quick links & contact info shown on the website</p>
-                  </div>
-                  {cmSaveMsg && (
-                    <div className="flex items-center gap-2 bg-teal-500/10 border border-teal-500/25 text-teal-400 px-4 py-2 rounded-xl text-xs font-bold">
-                      <CheckCircle size={14} /> {cmSaveMsg}
-                    </div>
-                  )}
-                </div>
-
-                {/* SECTION 1: Announcement Bar */}
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Bell size={16} className="text-teal-400" />
-                    <h3 className="font-black text-white text-sm">Announcement Bar</h3>
-                    <span className="text-[10px] text-slate-400 font-semibold">(Shown above Navbar when enabled)</span>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Enable Bar:</label>
-                    <button
-                      onClick={() => setAnnouncement(p => ({...p, enabled: !p.enabled}))}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                        announcement.enabled ? 'bg-teal-600 text-white' : 'bg-slate-800 border border-white/10 text-slate-400'
-                      }`}
-                    >
-                      {announcement.enabled ? <ToggleRight size={14}/> : <ToggleLeft size={14}/>}
-                      {announcement.enabled ? 'Enabled' : 'Disabled'}
-                    </button>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Bar Type / Color</label>
-                      <select value={announcement.type} onChange={e => setAnnouncement(p=>({...p,type:e.target.value}))}
-                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs"
-                      >
-                        <option value="info">Info (Teal)</option>
-                        <option value="promo">Promo (Purple Gradient)</option>
-                        <option value="warning">Warning (Amber)</option>
-                        <option value="success">Success (Green)</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">CTA Button Text</label>
-                      <input type="text" value={announcement.linkText} onChange={e => setAnnouncement(p=>({...p,linkText:e.target.value}))}
-                        placeholder="e.g. Know More"
-                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-teal-500"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Announcement Text *</label>
-                    <input type="text" value={announcement.text} onChange={e => setAnnouncement(p=>({...p,text:e.target.value}))}
-                      placeholder="e.g. 🎉 Diwali Special: Get 20% off on Health Insurance!"
-                      className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">CTA Link (optional)</label>
-                    <input type="text" value={announcement.link} onChange={e => setAnnouncement(p=>({...p,link:e.target.value}))}
-                      placeholder="e.g. /product/health or https://external.com"
-                      className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-teal-500"
-                    />
-                  </div>
-                  <button onClick={() => { db.setAnnouncement(announcement); setCmSaveMsg('Announcement saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl text-xs transition-colors"
-                  >
-                    <Save size={13}/> Save Announcement
-                  </button>
-                </div>
-
-                {/* SECTION 2: Offer Cards */}
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Tag size={16} className="text-amber-400" />
-                    <h3 className="font-black text-white text-sm">Offer / Promo Cards</h3>
-                    <span className="text-[10px] text-slate-400 font-semibold">(Shown on homepage below hero)</span>
-                  </div>
-
-                  {offers.map((offer, idx) => (
-                    <div key={offer.id || idx} className="border border-white/10 rounded-2xl p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-slate-300">Offer #{idx+1}</span>
-                        <button onClick={() => {
-                          const updated = offers.map((o,i) => i===idx ? {...o,active:!o.active} : o);
-                          setOffers(updated);
-                        }} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all ${
-                          offer.active ? 'bg-teal-600/20 text-teal-400 border border-teal-500/30' : 'bg-slate-800 text-slate-500 border border-white/10'
-                        }`}>
-                          {offer.active ? <ToggleRight size={12}/> : <ToggleLeft size={12}/>}
-                          {offer.active ? 'Active' : 'Hidden'}
-                        </button>
-                      </div>
-                      <div className="grid sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Title</label>
-                          <input type="text" value={offer.title} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],title:e.target.value}; setOffers(u); }}
-                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
-                        </div>
-                        <div>
-                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Badge Text</label>
-                          <input type="text" value={offer.badge} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],badge:e.target.value}; setOffers(u); }}
-                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
-                        </div>
-                        <div>
-                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Link (path or URL)</label>
-                          <input type="text" value={offer.link} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],link:e.target.value}; setOffers(u); }}
-                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
-                        </div>
-                        <div>
-                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Button Text</label>
-                          <input type="text" value={offer.btnText} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],btnText:e.target.value}; setOffers(u); }}
-                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500" />
-                        </div>
-                        <div className="sm:col-span-2">
-                          <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Description</label>
-                          <textarea rows={2} value={offer.description} onChange={e=>{ const u=[...offers]; u[idx]={...u[idx],description:e.target.value}; setOffers(u); }}
-                            className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-teal-500 resize-none" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                  <button onClick={() => { db.setOffers(offers); setCmSaveMsg('Offers saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition-colors"
-                  >
-                    <Save size={13}/> Save All Offers
-                  </button>
-                </div>
-
-                {/* SECTION 3: Quick Links */}
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <LinkIcon size={16} className="text-brand-gold" />
-                    <h3 className="font-black text-white text-sm">Quick Links Bar</h3>
-                    <span className="text-[10px] text-slate-400 font-semibold">(Shown below hero section)</span>
-                  </div>
-                  {quickLinks.map((ql, idx) => (
-                    <div key={ql.id||idx} className="flex items-center gap-3">
-                      <input type="text" value={ql.label} onChange={e=>{ const u=[...quickLinks]; u[idx]={...u[idx],label:e.target.value}; setQuickLinks(u); }}
-                        placeholder="Label" className="w-1/3 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-brand-gold" />
-                      <input type="text" value={ql.link} onChange={e=>{ const u=[...quickLinks]; u[idx]={...u[idx],link:e.target.value}; setQuickLinks(u); }}
-                        placeholder="Link (e.g. /renew or tel:+91...)" className="flex-1 px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-xs outline-none focus:border-brand-gold" />
-                      <button onClick={() => setQuickLinks(quickLinks.filter((_,i)=>i!==idx))} className="w-8 h-8 flex items-center justify-center bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors flex-shrink-0">
-                        <X size={13} />
-                      </button>
-                    </div>
-                  ))}
-                  <div className="flex gap-3">
-                    <button onClick={() => setQuickLinks([...quickLinks, { id:'ql'+Date.now(), label:'', link:'' }])}
-                      className="flex items-center gap-2 px-4 py-2 bg-slate-800 border border-white/10 rounded-lg text-slate-400 hover:text-white text-xs font-bold transition-all"
-                    >
-                      <Plus size={13}/> Add Link
-                    </button>
-                    <button onClick={() => { db.setQuickLinks(quickLinks); setCmSaveMsg('Quick links saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                      className="flex items-center gap-2 px-5 py-2 bg-brand-gold text-brand-navy font-bold rounded-lg text-xs transition-colors"
-                    >
-                      <Save size={13}/> Save Links
-                    </button>
-                  </div>
-                </div>
-
-                {/* SECTION 4: Contact Info */}
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Phone size={16} className="text-green-400" />
-                    <h3 className="font-black text-white text-sm">Contact Information</h3>
-                    <span className="text-[10px] text-slate-400 font-semibold">(Used in footer & claim support page)</span>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {[['Phone Number','phone','+91 75749 48768'],['WhatsApp (digits only)','whatsapp','7574948768'],['Email','email','support@policyperfect.co.in'],['Address','address','Gujarat, India']].map(([lbl,key,ph]) => (
-                      <div key={key}>
-                        <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">{lbl}</label>
-                        <input type="text" value={contact[key]} onChange={e => setContact(p=>({...p,[key]:e.target.value}))}
-                          placeholder={ph}
-                          className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-green-500"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <button onClick={() => { db.setContact(contact); setCmSaveMsg('Contact info saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-colors"
-                  >
-                    <Save size={13}/> Save Contact Info
-                  </button>
-                </div>
-
-                {/* SECTION 5: Site Logo */}
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Image size={16} className="text-purple-400" />
-                    <h3 className="font-black text-white text-sm">Site Logo Configuration</h3>
-                    <span className="text-[10px] text-slate-400 font-semibold">(Global site logo)</span>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Logo Image URL</label>
-                      <input type="text" value={siteLogo.url} onChange={e => setSiteLogo(p=>({...p,url:e.target.value}))}
-                        placeholder="e.g. /logo.png or https://example.com/logo.png"
-                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Logo Width (px)</label>
-                      <input type="number" value={siteLogo.width} onChange={e => setSiteLogo(p=>({...p,width:e.target.value}))}
-                        placeholder="180"
-                        className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-purple-500"
-                      />
-                    </div>
-                  </div>
-                  <div className="p-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center">
-                     {/* Preview */}
-                     <img src={siteLogo.url} style={{ width: `${siteLogo.width}px`, maxWidth: '100%' }} alt="Logo Preview" />
-                  </div>
-                  <button onClick={() => { db.setLogo(siteLogo); setCmSaveMsg('Logo configuration saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition-colors"
-                  >
-                    <Save size={13}/> Save Logo
-                  </button>
-                </div>
-
-                {/* SECTION 6: About Us */}
-                <div className="bg-white/5 border-white/10 border border-white/10 rounded-3xl p-6 space-y-4 mt-6">
-                  <div className="flex items-center gap-2 mb-1">
-                    <FileText size={16} className="text-pink-400" />
-                    <h3 className="font-black text-white text-sm">About Us Details</h3>
-                    <span className="text-[10px] text-slate-400 font-semibold">(Shown in Footer modal)</span>
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Company Description</label>
-                    <textarea value={aboutUs.text} onChange={e => setAboutUs({text: e.target.value})}
-                      rows={4}
-                      placeholder="PolicyPerfect is India's premier online insurance..."
-                      className="w-full px-3 py-2.5 bg-slate-800 border border-white/10 rounded-xl text-white text-xs outline-none focus:border-pink-500 resize-none"
-                    />
-                  </div>
-                  <button onClick={() => { db.setAbout(aboutUs); setCmSaveMsg('About Us details saved!'); setTimeout(()=>setCmSaveMsg(''),3000); }}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl text-xs transition-colors"
-                  >
-                    <Save size={13}/> Save Details
-                  </button>
-                </div>
-
-              </div>
-            )}
-
           </div>
         </div>
       </div>
@@ -1032,29 +779,29 @@ const AdminDashboard = () => {
       {/* Leads view detail modal popup */}
       {selectedLead && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-navy-light/70 backdrop-blur-sm">
-          <div className="bg-white/5 border-white/10 border border-white/10 rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            <div className="bg-brand-navy-light text-white px-6 py-4 flex justify-between items-center border-b border-white/10">
+          <div className="bg-white border-slate-200 border border-slate-200 rounded-[2.5rem] w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div className="bg-brand-navy-light text-slate-900 px-6 py-4 flex justify-between items-center border-b border-slate-200">
               <div>
                 <span className="bg-brand-gold text-brand-navy text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">{selectedLead.productType}</span>
                 <h3 className="text-lg font-black mt-1">Lead Details (Ref: {selectedLead.id})</h3>
               </div>
-              <button onClick={() => setSelectedLead(null)} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-slate-300 hover:text-white">
+              <button onClick={() => setSelectedLead(null)} className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-700 hover:text-slate-900">
                 <X size={18} />
               </button>
             </div>
             
-            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-300">
+            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-700">
               <div className="grid grid-cols-2 gap-4">
                 <div><span className="font-bold text-slate-500 block text-xs uppercase">Date Created</span><span className="font-semibold">{selectedLead.date}</span></div>
-                <div><span className="font-bold text-slate-500 block text-xs uppercase">Full Name</span><span className="font-semibold text-white">{selectedLead.name}</span></div>
-                <div><span className="font-bold text-slate-500 block text-xs uppercase">Mobile</span><span className="font-semibold text-white">{selectedLead.mobile}</span></div>
+                <div><span className="font-bold text-slate-500 block text-xs uppercase">Full Name</span><span className="font-semibold text-slate-900">{selectedLead.name}</span></div>
+                <div><span className="font-bold text-slate-500 block text-xs uppercase">Mobile</span><span className="font-semibold text-slate-900">{selectedLead.mobile}</span></div>
                 <div><span className="font-bold text-slate-500 block text-xs uppercase">Email</span><span className="font-semibold">{selectedLead.email || '-'}</span></div>
                 {selectedLead.pincode && <div><span className="font-bold text-slate-500 block text-xs uppercase">Location</span><span className="font-semibold">{selectedLead.city}, {selectedLead.state} - {selectedLead.pincode}</span></div>}
               </div>
 
               {selectedLead.make && (
-                <div className="border-t border-white/10 pt-4 space-y-2">
-                  <h4 className="font-bold text-white text-xs uppercase">🚗 Vehicle Details</h4>
+                <div className="border-t border-slate-200 pt-4 space-y-2">
+                  <h4 className="font-bold text-slate-900 text-xs uppercase">🚗 Vehicle Details</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Vehicle Make/Model</span><span>{selectedLead.make} {selectedLead.model}</span></div>
                     {selectedLead.variant && <div><span className="font-bold text-slate-500 block text-xs uppercase">Variant</span><span>{selectedLead.variant}</span></div>}
@@ -1066,8 +813,8 @@ const AdminDashboard = () => {
 
               {/* Health insurance details */}
               {selectedLead.members && (
-                <div className="border-t border-white/10 pt-4 space-y-2">
-                  <h4 className="font-bold text-white text-xs uppercase">🩺 Health Cover Details</h4>
+                <div className="border-t border-slate-200 pt-4 space-y-2">
+                  <h4 className="font-bold text-slate-900 text-xs uppercase">🩺 Health Cover Details</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Covered Members</span><span>{selectedLead.members}</span></div>
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Members Ages / DOB</span><span>{selectedLead.memberDetails}</span></div>
@@ -1078,8 +825,8 @@ const AdminDashboard = () => {
 
               {/* Fire insurance details */}
               {selectedLead.propertyType && (
-                <div className="border-t border-white/10 pt-4 space-y-2">
-                  <h4 className="font-bold text-white text-xs uppercase">🔥 Fire Risk details</h4>
+                <div className="border-t border-slate-200 pt-4 space-y-2">
+                  <h4 className="font-bold text-slate-900 text-xs uppercase">🔥 Fire Risk details</h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Property Type</span><span>{selectedLead.propertyType}</span></div>
                     <div><span className="font-bold text-slate-500 block text-xs uppercase">Construction Type</span><span>{selectedLead.constructionType}</span></div>
@@ -1090,8 +837,8 @@ const AdminDashboard = () => {
               )}
             </div>
             
-            <div className="bg-brand-navy-light px-6 py-4 border-t border-white/10 flex justify-end">
-              <button onClick={() => setSelectedLead(null)} className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition-colors">
+            <div className="bg-brand-navy-light px-6 py-4 border-t border-slate-200 flex justify-end">
+              <button onClick={() => setSelectedLead(null)} className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-700 font-bold rounded-xl text-xs transition-colors">
                 Close
               </button>
             </div>
@@ -1099,6 +846,7 @@ const AdminDashboard = () => {
         </div>
       )}
 
+      </div>
     </div>
   );
 };

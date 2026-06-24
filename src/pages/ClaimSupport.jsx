@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '../utils/db';
 import { 
-  PhoneCall, MessageCircle, ShieldCheck, FileText, Clock, AlertTriangle, 
-  CheckCircle2, XCircle, ChevronDown, ChevronUp, AlertCircle,
-  Camera, FileSignature, Landmark, Zap, CreditCard, Activity,
-  FileSearch, PenTool, CheckSquare, Search, FileKey, Scale, Settings, MapPin
+  ShieldCheck, PhoneCall, MessageCircle, FileSignature, Zap,
+  UploadCloud, CheckCircle2, Navigation, AlertCircle, FileText,
+  Video, Clock, MapPin, Search, Camera, Landmark, Activity,
+  FileSearch, PenTool, CheckSquare, FileKey, Scale, Settings,
+  CreditCard, XCircle, AlertTriangle, ChevronUp, ChevronDown
 } from 'lucide-react';
+import HeroBackground from '../components/HeroBackground';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 
@@ -81,9 +83,10 @@ const ClaimSupport = () => {
       />
 
       {/* --- HERO SECTION --- */}
-      <div className="bg-[#0c1b33] pt-28 pb-32 relative">
+      <div className="bg-[#0c1b33] pt-28 pb-32 relative overflow-hidden">
+        <HeroBackground isDark={true} icons={[ShieldCheck, FileSignature, Zap, PhoneCall, MessageCircle]} />
         {/* Abstract background elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[100%] bg-teal-500/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[100%] bg-blue-500/10 rounded-full blur-[120px]" />
         </div>
@@ -128,7 +131,7 @@ const ClaimSupport = () => {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-20 -mt-10">
 
         {/* --- CASHLESS LOCATOR CTA --- */}
-        <div className="bg-gradient-to-r from-teal-600 to-blue-700 rounded-3xl shadow-xl p-8 sm:p-10 mb-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+        {/* <div className="bg-gradient-to-r from-teal-600 to-blue-700 rounded-3xl shadow-xl p-8 sm:p-10 mb-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-4">
@@ -146,7 +149,7 @@ const ClaimSupport = () => {
               <Search size={18} /> Search Nearby
             </Link>
           </div>
-        </div>
+        </div> */}
 
         {/* --- WHAT IS AN INSURANCE CLAIM --- */}
         <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-8 sm:p-10 border border-slate-100 mb-12 flex flex-col md:flex-row items-center gap-8">

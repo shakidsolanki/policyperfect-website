@@ -3,86 +3,149 @@
 
   <url>
     <loc>https://policyperfect.co.in/</loc>
-    <lastmod>2026-06-12</lastmod>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/renew</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/about-us</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/claims</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/contact-us</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/login</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://policyperfect.co.in/privacy-policy</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/car</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/terms-and-conditions</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/disclaimer</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/refund-cancellation-policy</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/motor-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/bike</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/health-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/health</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/life-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/life</loc>
-    <lastmod>2026-06-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://policyperfect.co.in/product/travel</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/travel-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/home</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/home-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/cyber</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/marine-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://policyperfect.co.in/product/business</loc>
-    <lastmod>2026-06-12</lastmod>
+    <loc>https://policyperfect.co.in/fire-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/business-insurance</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/claim-assistance</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/get-quote</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/policy-renewal</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/support</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/grievance-redressal</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://policyperfect.co.in/cookie-policy</loc>
+    <lastmod>2026-06-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
 </urlset>

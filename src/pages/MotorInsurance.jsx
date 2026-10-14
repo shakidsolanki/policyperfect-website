@@ -115,9 +115,9 @@ const MotorInsurance = () => {
       {/* Hero Section */}
       <section className="bg-white border-b border-slate-200 pt-10 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <HeroBackground isDark={false} icons={[Car, Bike, Shield, Clock, Settings, Zap]} />
-        <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
-          {/* Left Text */}
-          <div className="lg:w-[50%] w-full space-y-6">
+        <div className="max-w-3xl mx-auto w-full space-y-6 relative z-10">
+          {/* Main Text Content */}
+          <div className="w-full space-y-6">
             
             {/* Top Badge */}
             <div className="flex flex-wrap items-center gap-3 bg-white border border-slate-100/60 rounded-full py-1.5 px-4 shadow-sm max-w-fit">
@@ -188,17 +188,6 @@ const MotorInsurance = () => {
                 <Lock size={13} className="text-slate-400" />
                 <span>Your Information is Protected</span>
               </div>
-            </div>
-          </div>
-
-          {/* Right Image / 3D Illustration */}
-          <div className="lg:w-[50%] w-full flex justify-center relative">
-            <div className="relative w-full max-w-[500px]">
-              <img 
-                src="/images/motor-hero-3d-car-clean.png" 
-                alt={pageTitle} 
-                className="w-full h-auto object-contain animate-float" 
-              />
             </div>
           </div>
         </div>

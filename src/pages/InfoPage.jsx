@@ -39,46 +39,56 @@ const PAGE_CONTENT = {
     text: 'We work with 25+ leading insurance providers in India to bring you the best rates and comprehensive coverage options: HDFC ERGO, ICICI Lombard, IndusInd General, Tata AIG, Bajaj Allianz, Digit Insurance, SBI General, IFFCO Tokio, Kotak General, Universal Sompo, and many more.'
   },
   terms: {
-    title: 'Terms of Use',
+    title: 'Terms & Conditions',
     icon: Info,
     color: 'text-violet-600 bg-violet-50',
     description: 'Read the terms and conditions for using the PolicyPerfect platform.',
-    text: 'Welcome to PolicyPerfect. By accessing this website (policyperfect.co.in), you agree to comply with our terms of service. The comparison data, premium calculations, and materials on this site are provided for informational purposes. We make every effort to display accurate premiums, but final rates are determined by the respective insurance companies based on underwriting guidelines.'
+    text: 'Welcome to PolicyPerfect. By accessing this website (policyperfect.co.in), you agree to comply with our terms of service.\n\nPolicyPerfect Insurance is an Insurance Advisory and Assistance Platform. We provide expert advice and assistance to help you find and buy the best insurance coverage from India\'s top insurers.\n\nThe premium calculations and materials on this site are provided for informational purposes. We make every effort to display accurate premiums, but final rates are determined by the respective insurance companies based on their underwriting guidelines.\n\nAll insurance policies are issued directly by the respective IRDAI-registered insurance companies. PolicyPerfect does not directly issue policies or guarantee claim settlements.'
   },
   privacy: {
     title: 'Privacy Policy',
     icon: Shield,
     color: 'text-teal-600 bg-teal-50',
     description: 'Your privacy is our top priority. Read how we protect your personal data.',
-    text: 'Your privacy is of utmost importance to us. PolicyPerfect collects basic contact details (name, email, phone) and vehicle/health information solely to fetch premium quotes from our insurance partners and save leads for follow-up support. We do not sell or share your personal data with unauthorized third parties. All lead data is encrypted and securely stored.'
+    text: 'Your privacy is of utmost importance to us. PolicyPerfect Insurance, an Insurance Advisory and Assistance Platform, collects basic contact details (name, email, phone) and vehicle/health information solely to provide insurance advisory services, fetch premium quotes from our insurance partners, and save leads for follow-up advisor support.\n\nWe do not sell or share your personal data with unauthorized third parties. All data is encrypted and securely stored.\n\nFor quotation and policy renewal assistance, previous policy details, RC copies, vehicle details, and other required documents may be collected. This data is used only for providing you with the best insurance advisory services.'
   },
   disclaimer: {
     title: 'Disclaimer',
     icon: Info,
     color: 'text-rose-600 bg-rose-50',
     description: 'Important legal notices and disclaimers regarding our services.',
-    text: 'Insurance is the subject matter of solicitation. PolicyPerfect acts as an online comparison and advisory portal and does not directly issue policies or guarantee claim settlements. The information displayed is based on details provided by insurers. Customers are advised to read policy terms and conditions carefully before purchasing.'
+    text: 'Insurance is the subject matter of solicitation.\n\nPolicyPerfect Insurance is an Insurance Advisory and Assistance Platform. We provide expert advisory and assistance services to help customers find and purchase the best insurance coverage. We do not directly issue policies or guarantee claim settlements.\n\nAll insurance policies are issued by the respective IRDAI-registered insurance companies. Premiums, underwriting decisions, policy issuance, and claim settlements are subject to insurer terms and conditions.\n\nThe information displayed on this platform is based on details provided by insurers and customers. Customers are advised to read policy terms and conditions carefully before purchasing.'
   },
   refund: {
-    title: 'Refund and Cancellation Policy',
+    title: 'Refund & Cancellation Policy',
     icon: Info,
     color: 'text-violet-600 bg-violet-50',
     description: 'Read our terms regarding refund and cancellation of insurance bookings.',
-    text: 'At PolicyPerfect, we strive to provide the best comparison and advisory services. Since premiums are paid directly to the insurance companies, refunds and cancellations are governed by the respective insurance provider\'s policy. If you wish to cancel a policy or seek a refund, you must submit a written request. Refunds will be processed by the insurer according to their guidelines. Feel free to contact our customer support for any assistance.'
+    text: 'At PolicyPerfect Insurance, we strive to provide the best insurance advisory and assistance services.\n\nSince insurance premiums are paid directly to the respective insurance companies, refunds and cancellations are governed by the respective insurance provider\'s policy terms and conditions.\n\nIf you wish to cancel a policy or seek a refund, you must submit a written request to the concerned insurance company. Refunds will be processed by the insurer according to their guidelines and the free-look period (generally 15 days from policy receipt).\n\nFeel free to contact our advisory team for any assistance regarding refund or cancellation requests.\n\nEmail: policyperfect.1@gmail.com\nPhone: +91 7574948768'
   },
   support: {
     title: 'Customer Support',
     icon: Shield,
     color: 'text-blue-600 bg-blue-50',
-    description: 'Reach our helpdesk for policy issues, claims, or general questions.',
-    text: 'Our dedicated customer support team is here to assist you with all your insurance needs. Whether you need help purchasing a policy, renewing an existing plan, or tracking a claim settlement, we are available 24/7. You can reach out to us at policyperfect.1@gmail.com or call our hotline at +91 75749 48768.'
+    description: 'Reach our advisory team for policy issues, claims, or general questions.',
+    text: 'Our dedicated insurance advisory team is here to assist you with all your insurance needs. Whether you need help purchasing a policy, renewing an existing plan, or guidance on claim settlement, our expert advisors are available to help.\n\nEmail: policyperfect.1@gmail.com\nPhone: +91 7574948768\nWhatsApp: +91 7574948768\n\nAddress:\nD-217, Joyos Hubtown,\nModhera Circle,\nNear GSRTC Bus Port,\nMahesana, Gujarat - 384001'
   },
   isnp: {
     title: 'ISNP Details',
     icon: CheckCircle2,
     color: 'text-indigo-600 bg-indigo-50',
     description: 'Guidelines and disclosures for Insurance Self-Network Platforms (ISNP).',
-    text: 'PolicyPerfect is compliant with the regulatory guidelines for Insurance Self-Network Platforms (ISNP).\n\nPlatform Name: Policy Perfect Insurance\nBusiness Type: Insurance Advisory & Assistance Services\nStatus: Active.'
+    text: `PolicyPerfect Insurance is registered and compliant with IRDAI regulatory guidelines for Insurance Self-Network Platforms (ISNP).
+
+Platform Name: Policy Perfect Insurance
+Business Type: Insurance Advisory & Assistance Services
+Registered Address: D-217, Joyos Hubtown, Modhera Circle, Near GSRTC Bus Port, Mahesana, Gujarat - 384001
+Email: policyperfect.1@gmail.com
+Phone: +91 7574948768
+Established: 01 August 2024
+Status: Active
+
+Note: PolicyPerfect Insurance is an Insurance Advisory and Assistance Platform. All insurance policies are issued by the respective IRDAI-registered insurance companies. We do not directly issue policies. Premiums, underwriting decisions, and claim settlements are subject to the respective insurer's terms and conditions.`
   },
   grievance: {
     title: 'Grievance Redressal',

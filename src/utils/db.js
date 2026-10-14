@@ -382,6 +382,12 @@ export const db = {
     localStorage.setItem('policy_leads', JSON.stringify(leads));
     saveToFirebase('policy_leads', leads);
   },
+  addMotorLead: (lead) => {
+    const leads = JSON.parse(localStorage.getItem('policy_leads') || '[]');
+    leads.unshift(lead);
+    localStorage.setItem('policy_leads', JSON.stringify(leads));
+    saveToFirebase('policy_leads', leads);
+  },
   addRenewal: (ren) => {
     const renewals = JSON.parse(localStorage.getItem('renewal_requests') || '[]');
     renewals.unshift(ren);

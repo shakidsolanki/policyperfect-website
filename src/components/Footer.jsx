@@ -44,7 +44,7 @@ const Footer = () => {
               <img src={logo.url} alt="Policy Perfect" style={{ width: `${logo.width}px`, maxWidth: '100%' }} className="h-auto object-contain" />
             </Link>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Compare and buy the best insurance policies online. We help you find the right coverage at the best price.
+              PolicyPerfect Insurance is an Insurance Advisory and Assistance Platform. We help you find the best insurance coverage from India's top insurers with expert guidance.
             </p>
             <div className="text-xs text-slate-650 space-y-2 pt-2 border-t border-slate-300">
               <p className="font-bold text-slate-800">{contact.legalName || 'Policy Perfect Insurance'}</p>
@@ -89,7 +89,7 @@ const Footer = () => {
 
         <div className="border-t border-slate-300 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-slate-500 text-center md:text-left max-w-3xl leading-relaxed">
-            *Standard T&C Apply. Insurance is the subject matter of solicitation. {contact.legalName || 'Policy Perfect Insurance'} acts as an online insurance comparison and advisory portal and does not directly issue policies or guarantee claim settlements. All premium rates and details are subject to underwriting guidelines of the respective insurer.
+            *Standard T&C Apply. Insurance is the subject matter of solicitation. {contact.legalName || 'Policy Perfect Insurance'} is an Insurance Advisory and Assistance Platform and does not directly issue policies or guarantee claim settlements. All insurance policies are issued by the respective IRDAI-registered insurers. Premiums and policy details are subject to underwriting guidelines of the respective insurer.
           </p>
           <div className="flex items-center gap-1 text-sm text-slate-500">
             Made with <Heart size={14} className="text-red-500 fill-current" /> in India

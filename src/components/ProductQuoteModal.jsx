@@ -125,8 +125,12 @@ const ProductQuoteModal = ({ isOpen, onClose, productType, defaultProductType = 
         status: 'New'
       };
 
-      const existingLeads = db.getLeads ? db.getLeads() : [];
-      if (db.setLeads) db.setLeads([newLead, ...existingLeads]);
+      if (db.addLead) {
+        db.addLead(newLead);
+      } else {
+        const existingLeads = db.getLeads ? db.getLeads() : [];
+        if (db.setLeads) db.setLeads([newLead, ...existingLeads]);
+      }
 
       setIsSubmitting(false);
       setIsSubmitted(true);

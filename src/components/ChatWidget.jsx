@@ -165,16 +165,14 @@ const ChatWidget = () => {
           href="https://wa.me/917574948768?text=Hi,%20I'm%20interested%20in%20getting%20a%20free%20insurance%20quote."
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 px-5 py-3 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-full shadow-2xl shadow-green-500/20 border border-white/10 font-black text-xs uppercase tracking-wider transition-all duration-300"
+          className="flex items-center gap-2 px-3.5 py-2 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-full shadow-lg shadow-green-500/20 border border-white/20 transition-all duration-300"
+          title="Chat on WhatsApp"
         >
           {/* WhatsApp Icon */}
-          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 fill-current flex-shrink-0" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.498 1.451 5.438 1.453 5.494 0 9.961-4.47 9.965-9.97.002-2.663-1.032-5.166-2.91-7.047C17.262 1.715 14.76 1.68 12.087 1.68 6.592 1.68 2.124 6.149 2.12 11.65c-.002 1.947.504 3.85 1.464 5.46L2.6 20.25l3.22-.843zM18.06 14.612c-.328-.164-1.943-.96-2.247-1.07-.303-.11-.523-.165-.743.164-.22.33-.85.164-1.04.164-.19.001-.383-.082-.71-.247-1.385-.69-2.42-1.205-3.3-2.72-.228-.396.228-.367.653-1.217.07-.142.036-.266-.017-.372-.055-.107-.522-1.258-.716-1.724-.19-.453-.383-.39-.522-.397-.135-.007-.29-.008-.445-.008-.155 0-.408.058-.62.29-.214.234-.817.8-.817 1.948 0 1.15.836 2.257.95 2.417.114.16 1.644 2.512 3.985 3.52.556.24 1.0.384 1.34.492.56.177 1.07.152 1.472.09.45-.07 1.943-.794 2.217-1.52.274-.727.274-1.348.192-1.48-.08-.13-.3-.21-.628-.372z"/>
           </svg>
-          <div className="flex flex-col text-left">
-            <span className="text-[8px] text-green-100 font-bold leading-tight">Get Free Insurance Quote</span>
-            <span className="text-white font-black leading-none text-[11px]">WhatsApp Now</span>
-          </div>
+          <span className="text-[12px] font-bold text-white tracking-wide">WhatsApp</span>
         </motion.a>
       </div>
 
